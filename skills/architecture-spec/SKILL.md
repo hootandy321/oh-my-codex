@@ -110,6 +110,8 @@ Produce an architecture/spec artifact as a Markdown outline document. The body m
     - State how Codex as the main supervisor will review child-agent work.
     - Define which checks can be delegated and which approval gates must remain with the main Codex supervisor.
     - Define when implementation should continue to the next backlog item, backprop to spec/goal, or stop for user authority.
+    - Map the spec into RAF runtime phases: `raf-dispatch`, `raf-verify`, and `raf-backprop`.
+    - Identify which backlog items can be independent child-agent dispatches and which must stay sequential because of shared files, dependency ordering, or review risk.
   - Backprop rules
     - Define which failures return to `$goal-setting`.
     - Define which failures return to `$architecture-spec`.

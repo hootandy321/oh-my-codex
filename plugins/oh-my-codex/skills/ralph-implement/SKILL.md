@@ -29,16 +29,39 @@ If the spec is missing, route back to `$architecture-spec`. If the goal is missi
 ## Implementation Loop
 
 1. Load the goal contract and architecture/spec.
-2. Confirm artifact type, selected agent route, implementation backlog, and supervision plan.
+2. Enter `raf-dispatch`: confirm artifact type, selected agent route, implementation backlog, and supervision plan.
 3. Select the next backlog item using the priority, dependency, risk, and value criteria from the spec.
-4. Execute that item through the appropriate child agents or direct implementation lane.
-5. Collect fresh evidence.
-6. Run the falsifier and acceptance checks for the current item.
+4. Dispatch that item through the appropriate child agents or direct implementation lane.
+5. Collect child-agent ACK/evidence or direct implementation evidence.
+6. Enter `raf-verify`: run the falsifier and acceptance checks for the current item.
 7. Classify failures with `raf-backprop-critic`.
-8. Fix implementation failures locally.
-9. Backprop goal/spec failures to the owning earlier stage.
-10. If the item passes, mark it complete, update the backlog, and select the next implementable item.
-11. Repeat until all required backlog items are complete, the goal rubric is satisfied, or a real blocker/user authority gate is proven.
+8. Enter `raf-backprop` when evidence fails, scope changes, or a challenger/backlog decision is needed.
+9. Fix implementation failures locally when they are inside the approved spec.
+10. Backprop goal/spec failures to the owning earlier stage.
+11. If the item passes, mark it complete, update the backlog, and select the next implementable item.
+12. Repeat until all required backlog items are complete, the goal rubric is satisfied, or a real blocker/user authority gate is proven.
+
+## Team-Like Runtime Phases
+
+`$ralph-implement` borrows OMX Team's staged lifecycle while keeping Codex as the single supervisor.
+
+- `raf-dispatch`
+  - Select the next implementable backlog item.
+  - Decide direct work versus child-agent dispatch.
+  - Write a bounded assignment: item id, scope, files/artifacts, expected evidence, non-goals, and escalation triggers.
+  - Require ACK/readback when a child agent or team lane is used.
+- `raf-verify`
+  - Verify the active backlog item before accepting it.
+  - Use tests, builds, lint, artifact checks, reviewer agents, visual checks, or domain evidence as appropriate.
+  - Treat implementer claims as untrusted until evidence is inspected by Codex supervisor or independent verifier/reviewer agents.
+- `raf-backprop`
+  - Classify failure as implementation bug, weak backlog item, spec mismatch, goal mismatch, missing authority, or environmental blocker.
+  - Route implementation bugs back to `raf-dispatch`.
+  - Route weak item/spec issues back to `$architecture-spec`.
+  - Route wrong-goal or authority issues back to `$goal-setting` or the user.
+  - Route passed items to backlog continuation or terminal completion.
+
+This is a control model, not a requirement to launch tmux Team. Use native subagents for bounded in-session parallelism; use OMX Team only when durable tmux workers, worktrees, mailbox coordination, or long-running parallel lanes are actually needed.
 
 ## Continuous Implementation Backlog
 
@@ -51,6 +74,7 @@ The implementation stage is not limited to the first champion pass. It should ke
   - Backprop items returned from implementation failures that do not require a new user decision.
 - Item lifecycle
   - `pending` - approved but not started.
+  - `dispatched` - assigned to Codex supervisor, native subagent, or Team worker lane with a bounded scope.
   - `active` - currently owned by the main Codex supervisor or a child agent.
   - `verifying` - implementation appears complete and evidence is being collected.
   - `reviewing` - Codex supervisor and review agents are checking whether the evidence is sufficient.
@@ -75,6 +99,7 @@ Codex is the main supervisor. Child agents can implement, test, critique, resear
 - Main-supervisor responsibilities
   - Own the backlog and decide which item is next.
   - Translate the approved spec into bounded child-agent assignments.
+  - Require ACK/readback for delegated work when the runtime supports it.
   - Review child-agent outputs before merging them into the main implementation record.
   - Enforce non-goals, decision boundaries, and stop criteria.
   - Decide whether a failure is local implementation work, backlog reprioritization, `$architecture-spec` backprop, `$goal-setting` backprop, or a user authority gate.
@@ -187,6 +212,9 @@ Return an implementation record as a Markdown outline document. The body must us
   - Adaptive backlog
     - List each item with status, owner, evidence, and next action.
     - Explain why the supervisor continued, stopped, deferred, or backpropagated after each item.
+  - Runtime phase trace
+    - Record each `raf-dispatch`, `raf-verify`, and `raf-backprop` transition.
+    - State the reason for every transition and the evidence that triggered it.
   - Child-agent supervision
     - Record child agent type, assigned item, reasoning effort, returned evidence, and supervisor verdict.
     - Record any model/provider override requested by the user or inherited from configuration.

@@ -119,6 +119,29 @@ describe('RAF stage skill contract', () => {
     assert.match(raf, /Codex remains the main supervisor/i);
   });
 
+  it('adapts the Team-style five-phase runtime model inside RAF implementation', () => {
+    const raf = readSurface('skills/raf/SKILL.md');
+    const architectureSpec = readSurface('skills/architecture-spec/SKILL.md');
+    const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
+
+    assert.match(raf, /Two-Layer Model/i);
+    assert.match(raf, /Team-Mode Pattern To Reuse/i);
+    assert.match(raf, /Runtime Phase Mapping/i);
+    assert.match(raf, /RAF Runtime State Contract/i);
+    for (const phase of ['raf-goal', 'raf-spec', 'raf-dispatch', 'raf-verify', 'raf-backprop']) {
+      assert.match(raf, new RegExp(phase));
+    }
+    for (const field of ['goal_contract', 'architecture_spec', 'backlog', 'dispatches', 'verification', 'backprop_ledger', 'transition_log']) {
+      assert.match(raf, new RegExp(field));
+    }
+
+    assert.match(architectureSpec, /Map the spec into RAF runtime phases/i);
+    assert.match(ralphImplement, /Team-Like Runtime Phases/i);
+    assert.match(ralphImplement, /Require ACK\/readback/i);
+    assert.match(ralphImplement, /Runtime phase trace/i);
+    assert.match(ralphImplement, /not a requirement to launch tmux Team/i);
+  });
+
   it('documents child-agent configuration and task-type governance for implementation', () => {
     const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
 
