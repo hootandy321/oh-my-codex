@@ -63,6 +63,30 @@ If the spec is missing, route back to `$architecture-spec`. If the goal is missi
 
 This is a control model, not a requirement to launch tmux Team. Use native subagents for bounded in-session parallelism; use OMX Team only when durable tmux workers, worktrees, mailbox coordination, or long-running parallel lanes are actually needed.
 
+## Team Use Inside Implementation
+
+`$ralph-implement` may use `$team` as an execution engine when the approved spec and RAF state permit it.
+
+- Inputs from `$architecture-spec`
+  - `team_policy`: `auto`, `manual`, or `off`
+  - candidate parallel lanes
+  - shared-file/dependency map
+  - verification and integration evidence required from Team
+- Auto Team launch
+  - Allowed only when `team_policy` is `auto`.
+  - Allowed only when the environment can actually run OMX Team or the supervisor has a valid external Team handoff path.
+  - Required launch evidence: team name, worker count/roles, task ids, ACK or equivalent startup evidence, status path, and shutdown/completion gate.
+  - If Team runtime is unavailable, fall back to native subagents or direct implementation and record `team_invocations[].status = "skipped"` with reason.
+- Manual Team launch
+  - Required when `team_policy` is `manual`.
+  - Produce a launch hint and wait for explicit approval before starting durable Team runtime.
+- Team off
+  - Required when `team_policy` is `off`.
+  - Do not invoke Team; use native subagents or direct supervisor execution.
+- Supervisor invariant
+  - Team workers own only their assigned tasks.
+  - Codex supervisor owns RAF backlog, phase transitions, evidence acceptance, and backprop decisions.
+
 ## Continuous Implementation Backlog
 
 The implementation stage is not limited to the first champion pass. It should keep working through an approved adaptive backlog.
@@ -189,13 +213,23 @@ Agent-selection rule:
 
 ## PPT Implementation Rule
 
-For presentation tasks, final implementation MUST use:
+For presentation tasks, final implementation MUST use the bundled OMX `ppt-master` skill shipped in the same installation:
 
 ```bash
-PPT_MASTER_SKILL_DIR=/Users/lxy/lxygit/wxyteam-pptmaster-skill/skills/ppt-master
+PPT_MASTER_SKILL_DIR=<current-omx-root>/skills/ppt-master
+uv run "$PPT_MASTER_SKILL_DIR/scripts/project_manager.py" ...
 ```
 
-Read `$PPT_MASTER_SKILL_DIR/SKILL.md` before implementation. Use `uv run` for `ppt-master` scripts. Completion requires a real editable PPTX under `exports/*.pptx`; an outline or HTML mock is not enough.
+Resolve `<current-omx-root>` from the active OMX package or plugin cache. In a source checkout this is the repository root containing `skills/ppt-master`; inside a Codex plugin install this is the plugin root whose sibling skills include `ppt-master`. Do not depend on a separate external checkout.
+
+Read `$PPT_MASTER_SKILL_DIR/SKILL.md` before implementation. Use `uv run` for bundled `ppt-master` scripts. Completion requires a real editable PPTX under `exports/*.pptx`; an outline or HTML mock is not enough.
+
+RAF/OMX stage boundary for `ppt-master` Eight Confirmations:
+
+- `$architecture-spec` owns the eight design decisions: canvas format, page count range, target audience/use case, style objective, color scheme, icon library, typography plan, and image usage policy.
+- `$ralph-implement` consumes those decisions from the approved spec and writes `design_spec.md` / `spec_lock.md` accordingly.
+- Do not stop in Stage 3 to ask the user for Eight Confirmations if they are already present in the approved architecture/spec.
+- If they are missing or materially conflict with the source/goals, route back to `$architecture-spec` or classify the issue as a user authority gate; do not continue by inventing a new implementation-layer decision.
 
 ## Output Shape
 
@@ -218,6 +252,10 @@ Return an implementation record as a Markdown outline document. The body must us
   - Child-agent supervision
     - Record child agent type, assigned item, reasoning effort, returned evidence, and supervisor verdict.
     - Record any model/provider override requested by the user or inherited from configuration.
+  - Team supervision
+    - Record `team_policy`.
+    - Record any Team launch hint, actual Team run, skip reason, status evidence, and terminal task evidence.
+    - Record how Codex supervisor integrated or rejected Team output.
   - Implementation steps completed
     - Describe each meaningful implementation step.
     - Tie each step back to the spec requirement it satisfies.

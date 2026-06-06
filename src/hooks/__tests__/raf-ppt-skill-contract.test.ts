@@ -27,7 +27,9 @@ describe('RAF stage skill contract', () => {
     assert.match(architectureSpec, /PPT\/deck route/i);
     assert.match(architectureSpec, /Do not generate the deck in this stage/i);
     assert.match(ralphImplement, /PPT Implementation Rule/i);
-    assert.match(ralphImplement, /\/Users\/lxy\/lxygit\/wxyteam-pptmaster-skill\/skills\/ppt-master/);
+    assert.match(ralphImplement, /bundled OMX `ppt-master` skill/i);
+    assert.match(ralphImplement, /<current-omx-root>\/skills\/ppt-master/);
+    assert.doesNotMatch(ralphImplement, /PPT_MASTER_SKILL_DIR=\/Users\//);
     assert.match(ralphImplement, /exports\/\*\.pptx/);
   });
 
@@ -142,6 +144,42 @@ describe('RAF stage skill contract', () => {
     assert.match(ralphImplement, /not a requirement to launch tmux Team/i);
   });
 
+  it('documents full-flow RAF auto mode and manual stage controls', () => {
+    const raf = readSurface('skills/raf/SKILL.md');
+
+    assert.match(raf, /Manual And Automatic Operation/i);
+    assert.match(raf, /Manual stage operation/i);
+    assert.match(raf, /Automatic full-flow operation/i);
+    assert.match(raf, /\$raf --team=auto/);
+    assert.match(raf, /\$raf --team=manual/);
+    assert.match(raf, /\$raf --team=off/);
+    assert.match(raf, /Autopilot-Style Hook Mode/i);
+    assert.match(raf, /mode: "raf"/);
+    assert.match(raf, /child stages are supervised phases/i);
+    assert.match(raf, /auto_mode/);
+    assert.match(raf, /team_policy/);
+    assert.match(raf, /handoff_artifacts/);
+    assert.match(raf, /return_to_phase_reason/);
+  });
+
+  it('documents Team auto/manual/off policy under RAF supervision', () => {
+    const raf = readSurface('skills/raf/SKILL.md');
+    const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
+
+    assert.match(raf, /Team Invocation Policy/i);
+    assert.match(raf, /team_policy: "auto"/);
+    assert.match(raf, /team_policy: "manual"/);
+    assert.match(raf, /team_policy: "off"/);
+    assert.match(raf, /Team workers do not own RAF goal\/spec\/backlog state/i);
+
+    assert.match(ralphImplement, /Team Use Inside Implementation/i);
+    assert.match(ralphImplement, /Auto Team launch/i);
+    assert.match(ralphImplement, /Manual Team launch/i);
+    assert.match(ralphImplement, /Team off/i);
+    assert.match(ralphImplement, /Team supervision/i);
+    assert.match(ralphImplement, /Codex supervisor owns RAF backlog/i);
+  });
+
   it('documents child-agent configuration and task-type governance for implementation', () => {
     const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
 
@@ -157,6 +195,37 @@ describe('RAF stage skill contract', () => {
     assert.match(ralphImplement, /Document\/report implementation/i);
     assert.match(ralphImplement, /Research implementation/i);
     assert.match(ralphImplement, /Child-agent supervision/i);
+  });
+
+  it('keeps ppt-master Eight Confirmations in architecture/spec rather than implementation prompts', () => {
+    const architectureSpec = readSurface('skills/architecture-spec/SKILL.md');
+    const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
+    const rafPpt = readSurface('skills/raf-ppt/SKILL.md');
+
+    for (const decision of [
+      'Canvas format',
+      'Page count range',
+      'Target audience and use case',
+      'Style objective',
+      'Color scheme',
+      'Icon library choice',
+      'Typography plan',
+      'Image usage policy',
+    ]) {
+      assert.match(architectureSpec, new RegExp(decision));
+    }
+
+    assert.match(architectureSpec, /Eight Confirmations/i);
+    assert.match(architectureSpec, /Stage 2 architecture\/spec decisions/i);
+    assert.match(architectureSpec, /before handing off to `\$ralph-implement`/i);
+
+    assert.match(ralphImplement, /stage boundary for `ppt-master` Eight Confirmations/i);
+    assert.match(ralphImplement, /\$architecture-spec` owns the eight design decisions/i);
+    assert.match(ralphImplement, /Do not stop in Stage 3 to ask the user for Eight Confirmations/i);
+    assert.match(ralphImplement, /route back to `\$architecture-spec`/i);
+
+    assert.match(rafPpt, /Eight Confirmations belong to `\$architecture-spec`/i);
+    assert.match(rafPpt, /consume them instead of re-asking during implementation/i);
   });
 
   it('documents common RAF agents and presentation-route adapter agents', () => {

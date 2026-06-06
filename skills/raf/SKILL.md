@@ -34,6 +34,74 @@ RAF has two layers:
 
 Do not expose the runtime phases as separate public skills unless the user is debugging the workflow itself. They are the internal control model that keeps the three public stages supervised, resumable, and evidence-driven.
 
+## Manual And Automatic Operation
+
+RAF supports both manual stage operation and an Autopilot-style automatic supervisor mode.
+
+- Manual stage operation
+  - The user invokes `$goal-setting`, `$architecture-spec`, and `$ralph-implement` directly.
+  - Each stage produces its own formal outline artifact.
+  - The user or supervisor chooses when to hand off to the next stage.
+  - Use this when the user wants to inspect, revise, or approve each stage before continuing.
+- Automatic full-flow operation
+  - The user invokes `$raf <task>` as the full-flow entrypoint.
+  - `$raf` acts as the supervisor over the child stages, similar to how `$autopilot` supervises its child phases.
+  - When a phase gate is satisfied, `$raf` automatically updates state and transitions to the next RAF runtime phase.
+  - The automatic path still respects user authority gates, destructive boundaries, credential gates, and unresolved high ambiguity.
+  - The automatic path must not skip `$goal-setting` merely because implementation sounds obvious.
+
+Recommended invocation forms:
+
+- `$raf "<task>"`
+  - Default full-flow automatic mode.
+  - Uses `team_policy: "manual"` unless the spec explicitly selects another policy.
+- `$raf --team=auto "<task>"`
+  - Allows RAF to launch or recommend `$team` automatically when implementation lanes are independent, runtime support is available, and supervision evidence can be collected.
+- `$raf --team=manual "<task>"`
+  - RAF may recommend `$team`, but the user or supervisor must explicitly approve launch.
+- `$raf --team=off "<task>"`
+  - RAF uses direct work or native subagents only; it does not invoke `$team`.
+- `$goal-setting` / `$architecture-spec` / `$ralph-implement`
+  - Manual stage controls.
+
+## Autopilot-Style Hook Mode
+
+The full `$raf` entrypoint should behave like a supervised hook mode rather than a one-shot prompt. The hook state belongs to `mode: "raf"` and child stages are supervised phases, not independent peer workflows.
+
+- Phase cycle
+  - `raf-goal`
+  - `raf-spec`
+  - `raf-dispatch`
+  - `raf-verify`
+  - `raf-backprop`
+- Automatic transitions
+  - `raf-goal -> raf-spec`
+    - Allowed only after the goal contract exists, non-goals and decision boundaries are explicit, the deep-interview ambiguity gate is satisfied or explicitly risk-accepted, and the goal artifact is written.
+  - `raf-spec -> raf-dispatch`
+    - Allowed only after architecture/spec, implementation backlog, verification plan, supervision plan, and team policy are written.
+  - `raf-dispatch -> raf-verify`
+    - Allowed only after the active backlog item has implementation evidence or a child-agent/team dispatch has returned evidence.
+  - `raf-verify -> raf-backprop`
+    - Required when verification fails, scope changes, reviewer evidence is non-clean, or the next continuation decision needs classification.
+  - `raf-verify -> raf-dispatch`
+    - Allowed when the active item passes and another approved backlog item remains.
+  - `raf-backprop -> raf-dispatch`
+    - Allowed for local implementation bugs or backlog reprioritization inside the approved spec.
+  - `raf-backprop -> raf-spec`
+    - Required for weak architecture, missing viewpoints, bad variants, missing implementation backlog, or team policy mismatch.
+  - `raf-backprop -> raf-goal`
+    - Required for wrong target, wrong rubric, non-goal conflict, missing authority, or user-intent mismatch.
+  - `raf-verify|raf-backprop -> complete`
+    - Allowed only when required backlog items are done, verification evidence is clean, and the goal rubric is satisfied.
+- Resume behavior
+  - On `continue` / `resume`, read RAF state or the formal implementation record and continue from the current runtime phase.
+  - Do not restart goal discovery if a valid goal contract already exists.
+  - Do not regenerate spec if an approved spec/backlog already exists unless backprop requires it.
+- Hook safety
+  - Ask the user only for destructive, credentialed, external-production, or materially preference-dependent branches.
+  - Continue automatically through safe, reversible, already-approved phase transitions.
+  - Preserve every handoff artifact and transition reason.
+
 ## Team-Mode Pattern To Reuse
 
 Reuse the logic of OMX Team mode, not the tmux-specific implementation details:
@@ -91,6 +159,12 @@ Until a dedicated `.omx/state/raf/...` runtime exists, each RAF run must emulate
 
 - `phase`
   - one of `raf-goal`, `raf-spec`, `raf-dispatch`, `raf-verify`, `raf-backprop`, `complete`, `blocked`, `cancelled`
+- `phase_cycle`
+  - `["raf-goal","raf-spec","raf-dispatch","raf-verify","raf-backprop"]`
+- `auto_mode`
+  - `true` for full `$raf`, `false` for manual stage-only operation
+- `team_policy`
+  - one of `auto`, `manual`, or `off`
 - `goal_contract`
   - path or inline source of truth from `$goal-setting`
 - `architecture_spec`
@@ -99,6 +173,8 @@ Until a dedicated `.omx/state/raf/...` runtime exists, each RAF run must emulate
   - ordered implementation items with id, status, priority, dependency, owner, evidence, and next action
 - `dispatches`
   - child-agent assignments with agent type, reasoning effort, scope, expected output, ACK/evidence status, and supervisor verdict
+- `team_invocations`
+  - recommended, launched, skipped, blocked, or completed `$team` runs with reason and evidence
 - `verification`
   - commands, artifact checks, review verdicts, and acceptance evidence for the active item
 - `backprop_ledger`
@@ -107,6 +183,54 @@ Until a dedicated `.omx/state/raf/...` runtime exists, each RAF run must emulate
   - phase transitions, reasons, and timestamps
 - `terminal_condition`
   - why the run completed, blocked, cancelled, or returned to an earlier stage
+
+Example state skeleton:
+
+```json
+{
+  "mode": "raf",
+  "active": true,
+  "current_phase": "raf-goal",
+  "iteration": 1,
+  "phase_cycle": ["raf-goal", "raf-spec", "raf-dispatch", "raf-verify", "raf-backprop"],
+  "auto_mode": true,
+  "team_policy": "manual",
+  "handoff_artifacts": {
+    "goal_contract": null,
+    "architecture_spec": null,
+    "implementation_record": null
+  },
+  "backlog": [],
+  "dispatches": [],
+  "team_invocations": [],
+  "verification": null,
+  "backprop_ledger": [],
+  "return_to_phase_reason": null
+}
+```
+
+## Team Invocation Policy
+
+RAF can call `$team`, but `$team` remains an execution engine inside RAF rather than the owner of the RAF workflow.
+
+- `team_policy: "auto"`
+  - RAF may launch `$team` automatically when all conditions are true:
+    - the active implementation backlog has independent lanes or a broad verification matrix;
+    - shared files, dependencies, and integration boundaries are explicit;
+    - the current environment supports OMX Team runtime, or a durable team launch has been explicitly authorized;
+    - Codex supervisor can monitor state, mailbox/ACK, task terminal status, and verification evidence;
+    - the launch does not require destructive, credentialed, or external-production authority not already granted.
+  - If any condition is false, fall back to native subagents or direct supervised execution and record why Team was skipped.
+- `team_policy: "manual"`
+  - RAF may recommend `$team` and produce a launch hint.
+  - Do not launch `$team` without explicit user/supervisor approval.
+- `team_policy: "off"`
+  - RAF does not launch `$team`.
+  - Use direct Codex supervision and native subagents only.
+- In every policy
+  - Team workers do not own RAF goal/spec/backlog state.
+  - Team evidence returns to Codex supervisor.
+  - Codex supervisor decides whether the Team result completes the active item, requires fix, or triggers backprop.
 
 ## OMC Agent Attachment Map
 
