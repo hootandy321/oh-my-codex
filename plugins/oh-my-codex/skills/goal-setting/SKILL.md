@@ -28,18 +28,39 @@ Optional artifact classifiers:
 
 ## Required Output
 
-Produce a concise goal contract:
+Produce a goal contract as a Markdown outline document. The body must use `-` bullets and nested bullets, with each layer narrowing or operationalizing the layer above it. Do not make it terse; write enough detail for `$architecture-spec` to proceed without depending on chat memory.
 
-- user intent in the user's words
-- detected artifact type and confidence
-- desired artifact and artifact owner
-- audience, operator, or consumer
-- usage scenario
-- completion rubric with testable checks
-- non-goals and forbidden shortcuts
-- authority boundary: what the agent can decide versus what needs user input
-- stop condition and evidence required to claim completion
-- recommended next stage: `$architecture-spec`
+- Goal contract
+  - User intent in the user's words
+    - Preserve the user's framing, important nouns, and concrete examples.
+    - Explain what outcome the user is actually trying to achieve, not only the immediate artifact request.
+  - Detected artifact type and confidence
+    - State the detected type, such as presentation, code change, document, report, research artifact, or mixed artifact.
+    - Record the evidence that led to the classification and any uncertainty that later stages must watch.
+  - Desired artifact and owner
+    - Name the artifact that should exist at completion.
+    - State who will use, review, edit, present, or operate it.
+  - Audience, operator, or consumer
+    - Describe what this audience needs to understand, trust, decide, or do.
+    - Capture differences between the user, final audience, reviewer, and maintainer when they are not the same person.
+  - Usage scenario
+    - Explain where and how the artifact will be used.
+    - Include constraints from that scenario, such as time, format, editability, environment, or review pressure.
+  - Completion rubric with testable checks
+    - Define what must be true for the artifact to count as done.
+    - Include evidence checks that later stages can actually run or inspect.
+  - Non-goals and forbidden shortcuts
+    - State what must not be optimized for.
+    - Name shortcuts that would look productive but violate the user's intent.
+  - Authority boundary
+    - State what the agent can decide independently.
+    - State what requires user confirmation because it changes goal, scope, risk, or irreversible output.
+  - Stop condition and required evidence
+    - Define the exact condition for stopping.
+    - Name the artifact paths, logs, review records, or verification results expected at completion.
+  - Recommended next stage
+    - Point to `$architecture-spec`.
+    - Include the information that stage must preserve.
 
 ## Decision Boundary
 

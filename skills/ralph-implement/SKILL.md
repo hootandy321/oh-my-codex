@@ -62,11 +62,24 @@ Read `$PPT_MASTER_SKILL_DIR/SKILL.md` before implementation. Use `uv run` for `p
 
 ## Output Shape
 
-Return:
+Return an implementation record as a Markdown outline document. The body must use `-` bullets and nested bullets, with a clear progression from inputs, to route, to execution, to evidence, to backprop, to final artifact or blocker. Do not make it terse; write enough detail that a future run can resume from the record without relying on chat memory.
 
-- goal/spec inputs used
-- artifact type and agent route
-- implementation steps completed
-- verification evidence
-- backprop ledger
-- final artifact path or blocker
+- Implementation record
+  - Goal/spec inputs used
+    - Link or quote the goal contract and architecture/spec consumed.
+    - State any assumptions made while loading them.
+  - Artifact type and agent route
+    - State the route selected from the spec.
+    - Name the agents or specialist skills used.
+  - Implementation steps completed
+    - Describe each meaningful implementation step.
+    - Tie each step back to the spec requirement it satisfies.
+  - Verification evidence
+    - Include commands, artifact inspections, review results, or generated file paths.
+    - State pass/fail status and what each result proves.
+  - Backprop ledger
+    - Classify each failure or uncertainty.
+    - State whether it was fixed locally or routed back to goal/spec.
+  - Final artifact path or blocker
+    - Name the final artifact path when complete.
+    - If blocked, state the exact missing authority, dependency, input, or environmental condition.

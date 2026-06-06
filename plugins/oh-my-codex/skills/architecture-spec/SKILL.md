@@ -42,32 +42,67 @@ Document/report route:
 
 ## Required Output
 
-Produce an architecture/spec artifact containing:
+Produce an architecture/spec artifact as a Markdown outline document. The body must use `-` bullets and nested bullets, with a clear progression from goal reference, to perspectives, to variants, to selected architecture, to implementation and verification requirements. Do not make it terse; write enough detail for `$ralph-implement` to execute without depending on chat memory.
 
-- goal contract reference
-- detected artifact type and routing decision
-- perspective map: user, audience/consumer, implementer, reviewer, maintainer
-- champion variant
-- at least one materially different challenger variant
-- falsifier: the cheapest test that could reject the champion
-- selected approach and rationale
-- implementation spec with acceptance checks
-- verification plan
-- backprop rules
-- recommended next stage: `$ralph-implement`
+- Architecture/spec
+  - Goal contract reference
+    - Link or quote the goal contract source.
+    - Restate the parts that constrain this spec most strongly.
+  - Detected artifact type and routing decision
+    - State the selected artifact route and the agent stack it implies.
+    - Explain why other plausible routes were not selected.
+  - Perspective map
+    - User perspective
+      - Explain what the user is trying to accomplish and what would feel wrong to them.
+    - Audience or consumer perspective
+      - Explain what the final recipient needs to understand, trust, decide, or operate.
+    - Implementer perspective
+      - Explain what the toolchain can realistically produce and what constraints it creates.
+    - Reviewer perspective
+      - Explain what would cause rejection, rework, or loss of confidence.
+    - Maintainer perspective
+      - Explain how future agents or humans should revise the artifact safely.
+  - Champion variant
+    - Describe the preferred artifact shape.
+    - Explain why it best satisfies the goal contract.
+    - Name its assumptions and likely failure modes.
+  - Challenger variant
+    - Describe at least one materially different artifact shape.
+    - Explain what it optimizes differently.
+    - State the condition under which it would beat the champion.
+  - Falsifier
+    - Define the cheapest test, review, prototype, or inspection that could reject the champion.
+    - State what evidence would trigger backprop rather than local implementation fixes.
+  - Selected approach and rationale
+    - Choose the implementation path.
+    - Explain the tradeoff against the challenger.
+  - Implementation spec with acceptance checks
+    - Decompose the artifact into executable pieces.
+    - Attach acceptance checks to each piece.
+  - Verification plan
+    - Name commands, inspections, review passes, or artifact checks.
+    - State what evidence must be captured.
+  - Backprop rules
+    - Define which failures return to `$goal-setting`.
+    - Define which failures return to `$architecture-spec`.
+    - Define which failures stay inside `$ralph-implement`.
+  - Recommended next stage
+    - Point to `$ralph-implement`.
+    - Include the exact files or inline sections it should consume.
 
 ## PPT Spec Requirements
 
 For presentation tasks, the spec must include:
 
-- source material path or source-readiness blocker
-- audience and talk context
-- deck narrative arc
-- slide/page purpose list
-- visual direction
-- visible-text density target
-- speaker notes strategy
-- `ppt-master` project plan
-- evidence required for editable PPTX completion
+- Presentation spec
+  - Source material path or source-readiness blocker
+  - Audience and talk context
+  - Deck narrative arc
+  - Slide/page purpose list
+  - Visual direction
+  - Visible-text density target
+  - Speaker notes strategy
+  - `ppt-master` project plan
+  - Evidence required for editable PPTX completion
 
 Do not generate the deck in this stage. Produce the spec that `$ralph-implement` will execute.

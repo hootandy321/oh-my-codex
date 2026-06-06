@@ -31,6 +31,25 @@ describe('RAF stage skill contract', () => {
     assert.match(ralphImplement, /exports\/\*\.pptx/);
   });
 
+  it('requires formal stage artifacts to be detailed Markdown outlines', () => {
+    const raf = readSurface('skills/raf/SKILL.md');
+    const goalSetting = readSurface('skills/goal-setting/SKILL.md');
+    const architectureSpec = readSurface('skills/architecture-spec/SKILL.md');
+    const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
+
+    assert.match(raf, /Markdown outline document/i);
+    assert.match(raf, /Use `-` bullets/i);
+    assert.match(raf, /Make each layer semantically narrower than its parent/i);
+    assert.match(raf, /Do not make the outline artificially short/i);
+
+    for (const surface of [goalSetting, architectureSpec, ralphImplement]) {
+      assert.match(surface, /Markdown outline document/i);
+      assert.match(surface, /must use `-` bullets and nested bullets/i);
+      assert.match(surface, /Do not make it terse/i);
+      assert.match(surface, /without depending on chat memory|without relying on chat memory/i);
+    }
+  });
+
   it('documents common RAF agents and presentation-route adapter agents', () => {
     const raf = readSurface('skills/raf/SKILL.md');
     const goalSetting = readSurface('skills/goal-setting/SKILL.md');

@@ -13,6 +13,16 @@ description: Complete three-stage RAF flow that routes artifact-specific agents 
 
 Do not split public workflow choice by artifact type. The same three stages apply to PPT, code, documents, reports, research artifacts, and other deliverables. Artifact type is detected inside the stages and used only for agent routing.
 
+## Artifact Document Format
+
+Every formal document produced by the stages must be a Markdown outline document:
+
+- Use `-` bullets for the document body, not numbered-list-first prose, table-first prose, or loose paragraphs.
+- Use nested bullets to show logic progression from top-level conclusion, to supporting dimensions, to concrete requirements, evidence, risks, and next actions.
+- Make each layer semantically narrower than its parent. A child bullet must explain, constrain, evidence, or operationalize the parent bullet.
+- Do not make the outline artificially short. The document should be detailed enough that the next stage can execute from it without relying on chat memory.
+- Narrative text in the conversation can stay natural, but saved stage artifacts, handoff documents, specs, ledgers, and review records must follow this outline format.
+
 ## Use When
 
 - The user wants the agent to work from their thinking model, not just execute a narrow instruction.
@@ -49,7 +59,7 @@ Do not hide these failures under generic "needs polish" language.
 
 ## Output Shape
 
-Return:
+Return an outline-structured Markdown handoff:
 
 - goal contract path or inline contract
 - architecture/spec path or inline spec
