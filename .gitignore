@@ -40,3 +40,14 @@ snapshot.json
 .codex/skills/.system/**
 !.codex/prompts/
 !.codex/prompts/**
+
+# ppt-master generated assets: docs/reports/slides/codex-omx-raf-increment-briefing_PPT
+docs/reports/slides/codex-omx-raf-increment-briefing_PPT/images/*
+!docs/reports/slides/codex-omx-raf-increment-briefing_PPT/images/README.md
+docs/reports/slides/codex-omx-raf-increment-briefing_PPT/svg_final/*
+!docs/reports/slides/codex-omx-raf-increment-briefing_PPT/svg_final/README.md
+docs/reports/slides/codex-omx-raf-increment-briefing_PPT/exports/*
+!docs/reports/slides/codex-omx-raf-increment-briefing_PPT/exports/README.md
+docs/reports/slides/codex-omx-raf-increment-briefing_PPT/backup/*
+!docs/reports/slides/codex-omx-raf-increment-briefing_PPT/backup/README.md
+# end ppt-master generated assets: docs/reports/slides/codex-omx-raf-increment-briefing_PPT

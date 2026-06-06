@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect x="0" y="0" width="1280" height="720" fill="#F7F9FC"/>
+  <text x="64" y="84" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="600" fill="#00A6A6">09 / 建议决策</text>
+  <text x="64" y="126" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="42" font-weight="700" fill="#172033">建议把 RAF 作为下一阶段</text>
+  <text x="64" y="174" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="42" font-weight="700" fill="#172033">复杂任务组织模型</text>
+  <text x="64" y="210" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="22" font-weight="600" fill="#1E3A5F">并用本次 PPT 任务完成端到端验证。</text>
+
+  <rect x="64" y="228" width="352" height="252" rx="8" fill="#FFFFFF" stroke="#D8E0EA"/>
+  <circle cx="104" cy="276" r="22" fill="#00A6A6"/>
+  <path d="M94 276 L101 283 L115 267" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="140" y="270" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="22" font-weight="700" fill="#172033">确认方法定位</text>
+  <text x="140" y="302" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">RAF 是复杂目标治理层，</text>
+  <text x="140" y="328" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">不是替代 OMX 的执行底座。</text>
+  <line x1="104" y1="358" x2="376" y2="358" stroke="#D8E0EA"/>
+  <text x="104" y="396" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="700" fill="#1E3A5F">决策含义</text>
+  <text x="104" y="426" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">复杂任务先形成 goal contract</text>
+  <text x="104" y="452" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">和 architecture spec，再进入执行。</text>
+
+  <rect x="464" y="228" width="352" height="252" rx="8" fill="#E8F7F7" stroke="#00A6A6"/>
+  <circle cx="504" cy="276" r="22" fill="#00A6A6"/>
+  <path d="M494 276 L501 283 L515 267" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="540" y="270" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="22" font-weight="700" fill="#172033">保留动态专家试验</text>
+  <text x="540" y="302" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">项目级 prompt 与 agent 先验证，</text>
+  <text x="540" y="328" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">成熟后再提升为通用能力。</text>
+  <line x1="504" y1="358" x2="776" y2="358" stroke="#D8E0EA"/>
+  <text x="504" y="396" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="700" fill="#1E3A5F">决策含义</text>
+  <text x="504" y="426" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">降低新增专家成本，同时保留</text>
+  <text x="504" y="452" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">治理、测试和回滚边界。</text>
+
+  <rect x="864" y="228" width="352" height="252" rx="8" fill="#FFFFFF" stroke="#D8E0EA"/>
+  <circle cx="904" cy="276" r="22" fill="#2E7D32"/>
+  <path d="M894 276 L901 283 L915 267" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="940" y="270" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="22" font-weight="700" fill="#172033">用 PPT 完成闭环验证</text>
+  <text x="940" y="302" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">源稿、规格、SVG、讲稿、</text>
+  <text x="940" y="328" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">editable PPTX 全链路产出。</text>
+  <line x1="904" y1="358" x2="1176" y2="358" stroke="#D8E0EA"/>
+  <text x="904" y="396" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="700" fill="#1E3A5F">决策含义</text>
+  <text x="904" y="426" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">不是只讲方法，而是用一个</text>
+  <text x="904" y="452" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">真实可交付产物证明它。</text>
+
+  <text x="64" y="534" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="20" font-weight="700" fill="#1E3A5F">建议路线</text>
+  <line x1="156" y1="528" x2="1216" y2="528" stroke="#D8E0EA" stroke-width="2"/>
+  <circle cx="188" cy="582" r="18" fill="#1E3A5F"/>
+  <text x="181" y="589" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="700" fill="#FFFFFF">1</text>
+  <line x1="206" y1="582" x2="548" y2="582" stroke="#D8E0EA" stroke-width="3"/>
+  <circle cx="584" cy="582" r="18" fill="#00A6A6"/>
+  <text x="577" y="589" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="700" fill="#FFFFFF">2</text>
+  <line x1="602" y1="582" x2="944" y2="582" stroke="#D8E0EA" stroke-width="3"/>
+  <circle cx="980" cy="582" r="18" fill="#2E7D32"/>
+  <text x="973" y="589" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="700" fill="#FFFFFF">3</text>
+  <text x="156" y="626" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" font-weight="700" fill="#172033">短期：完成本 PPT 端到端产物闭环</text>
+  <text x="512" y="626" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" font-weight="700" fill="#172033">中期：扩展代码、报告、研究 routes</text>
+  <text x="910" y="626" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" font-weight="700" fill="#172033">长期：形成动态专家治理标准</text>
+
+  <text x="64" y="674" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="12" fill="#7A869A">Decision ask: approve RAF and the PPT validation route</text>
+  <text x="1190" y="674" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="12" fill="#7A869A">09 / 09</text>
+</svg>

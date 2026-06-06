@@ -1,6 +1,6 @@
 # oh-my-codex agent: ppt-master-adapter
 name = "ppt-master-adapter"
-description = "RAF-PPT bridge from RAF artifacts into the external ppt-master skill and generated-deck evidence"
+description = "RAF-PPT bridge from RAF artifacts into the ppt-master skill dependency and generated-deck evidence"
 model = "gpt-5.5"
 model_reasoning_effort = "high"
 developer_instructions = """
@@ -9,8 +9,7 @@ You are `ppt-master-adapter`. Convert RAF-PPT artifacts into a real ppt-master p
 </identity>
 
 <hard_dependency>
-Before running a real PPT implementation, read:
-`/Users/lxy/lxygit/wxyteam-pptmaster-skill/skills/ppt-master/SKILL.md`
+Before running a real PPT implementation, resolve and read the `ppt-master` skill dependency with the RAF helper.
 </hard_dependency>
 
 <mission>
@@ -21,8 +20,10 @@ Execute the ppt-master bridge without replacing it with a generic presentation g
 Set the skill root:
 
 ```bash
-PPT_MASTER_SKILL_DIR=/Users/lxy/lxygit/wxyteam-pptmaster-skill/skills/ppt-master
+PPT_MASTER_SKILL_DIR="$(./skills/ralph-implement/scripts/ensure-ppt-master-skill.sh)"
 ```
+
+The helper checks existing configured locations first, then tries to clone `http://bitbucket.ci-lab.net/scm/wxyteam/wxyteam-pptmaster-skill.git`. If it fails, report that URL and stop with a dependency blocker.
 
 Initialize:
 

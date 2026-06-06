@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect x="0" y="0" width="1280" height="720" fill="#F7F9FC"/>
+  <text x="64" y="84" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="600" fill="#00A6A6">04 / 核心方法</text>
+  <text x="64" y="126" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="34" font-weight="700" fill="#172033">RAF 三层 V 架构</text>
+  <text x="64" y="164" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="24" font-weight="600" fill="#1E3A5F">目标契约、架构规格、实现闭环，形成可审阅的任务治理回路</text>
+
+  <line x1="240" y1="240" x2="640" y2="520" stroke="#1E3A5F" stroke-width="5"/>
+  <line x1="640" y1="520" x2="1040" y2="240" stroke="#1E3A5F" stroke-width="5"/>
+  <path d="M1040 248 C1028 438, 832 590, 654 542" fill="none" stroke="#00A6A6" stroke-width="4"/>
+  <polygon points="651,542 672,537 660,558" fill="#00A6A6"/>
+
+  <rect x="128" y="206" width="292" height="132" rx="8" fill="#FFFFFF" stroke="#D8E0EA"/>
+  <text x="158" y="246" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="700" fill="#00A6A6">Stage 1</text>
+  <text x="158" y="284" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="28" font-weight="700" fill="#1E3A5F">目标契约</text>
+  <text x="158" y="320" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">目标、受众、非目标、验收标准</text>
+
+  <rect x="494" y="448" width="292" height="132" rx="8" fill="#FFFFFF" stroke="#00A6A6" stroke-width="2"/>
+  <text x="524" y="488" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="700" fill="#00A6A6">Stage 2</text>
+  <text x="524" y="526" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="28" font-weight="700" fill="#1E3A5F">架构规格</text>
+  <text x="524" y="562" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">多视角、变体、反证测试、规格</text>
+
+  <rect x="860" y="206" width="292" height="132" rx="8" fill="#FFFFFF" stroke="#D8E0EA"/>
+  <text x="890" y="246" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="700" fill="#00A6A6">Stage 3</text>
+  <text x="890" y="284" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="28" font-weight="700" fill="#1E3A5F">实现闭环</text>
+  <text x="890" y="320" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">执行、验证、证据、失败归因</text>
+
+  <rect x="830" y="432" width="332" height="84" rx="8" fill="#E8F7F7" stroke="#00A6A6"/>
+  <text x="862" y="468" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="20" font-weight="700" fill="#1E3A5F">Backprop 规则</text>
+  <text x="862" y="498" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="16" fill="#4B5565">目标错回 Stage 1；规格错回 Stage 2；实现错留 Stage 3</text>
+
+  <text x="136" y="624" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="700" fill="#172033">核心变化</text>
+  <text x="232" y="624" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" fill="#4B5565">不是先做再解释，而是先定义什么算对，再执行和验证</text>
+
+  <text x="64" y="674" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="12" fill="#7A869A">Evidence: skills/goal-setting, skills/architecture-spec, skills/ralph-implement</text>
+  <text x="1190" y="674" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="12" fill="#7A869A">04 / 09</text>
+</svg>

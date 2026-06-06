@@ -18,16 +18,18 @@ Do not ask the user to choose a PPT-specific skill. When the task is a presentat
 If the task asks for slides, a presentation, PowerPoint, PPT, PPTX, deck, speaker notes, or a `ppt-master` handoff:
 
 - `$goal-setting` records deck purpose, audience, source material, completion rubric, and authority boundaries.
-- `$architecture-spec` routes to the PPT agent stack for narrative, page planning, visual direction, notes, review, and `ppt-master` handoff planning.
-- `$ralph-implement` uses `ppt-master` for the final editable PPTX.
+- `$architecture-spec` routes to the PPT agent stack for narrative, page planning, visual direction, notes, review, the `ppt-master` Eight Confirmations, and handoff planning.
+- `$ralph-implement` uses `ppt-master` for the final editable PPTX from the approved architecture/spec.
 
-Final PPT implementation MUST use:
+In the generic RAF flow, `ppt-master`'s Eight Confirmations belong to `$architecture-spec`, because they are design/spec decisions. `$ralph-implement` must consume them instead of re-asking during implementation unless the approved spec is missing or contradictory.
+
+Final PPT implementation MUST use the `ppt-master` skill dependency resolved by `$ralph-implement`:
 
 ```bash
-PPT_MASTER_SKILL_DIR=/Users/lxy/lxygit/wxyteam-pptmaster-skill/skills/ppt-master
+PPT_MASTER_SKILL_DIR="$(./skills/ralph-implement/scripts/ensure-ppt-master-skill.sh)"
 ```
 
-Read `$PPT_MASTER_SKILL_DIR/SKILL.md` before starting a real deck implementation.
+The helper auto-detects an existing checkout or clones `http://bitbucket.ci-lab.net/scm/wxyteam/wxyteam-pptmaster-skill.git`. If the dependency cannot be cloned or updated, tell the user that URL and stop with a dependency blocker. Read `$PPT_MASTER_SKILL_DIR/SKILL.md` before starting a real deck implementation.
 
 ## Completion Evidence For PPT Tasks
 

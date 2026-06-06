@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect x="0" y="0" width="1280" height="720" fill="#F7F9FC"/>
+  <text x="64" y="84" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="600" fill="#00A6A6">06 / 首个验证路径</text>
+  <text x="64" y="126" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="34" font-weight="700" fill="#172033">PPT 路径为什么适合做首个验证</text>
+
+  <text x="86" y="234" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="44" font-weight="700" fill="#172033">PPT 不是边界，</text>
+  <text x="86" y="294" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="44" font-weight="700" fill="#172033">而是检验 RAF 是否能交付真实产物的高压场景</text>
+  <rect x="88" y="322" width="530" height="6" rx="3" fill="#00A6A6"/>
+
+  <rect x="86" y="386" width="488" height="126" rx="8" fill="#FFFFFF" stroke="#D8E0EA"/>
+  <text x="118" y="426" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="22" font-weight="700" fill="#1E3A5F">一个 PPT 任务天然要求</text>
+  <text x="118" y="462" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" fill="#4B5565">目标清楚、受众明确、叙事成立、视觉可读、</text>
+  <text x="118" y="492" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" fill="#4B5565">讲稿可用，并且最终必须导出 editable PPTX。</text>
+
+  <rect x="646" y="386" width="488" height="126" rx="8" fill="#E8F7F7" stroke="#00A6A6"/>
+  <text x="678" y="426" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="22" font-weight="700" fill="#1E3A5F">依赖处理也已纳入流程</text>
+  <text x="678" y="462" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" fill="#4B5565">RAF 通过 ensure-ppt-master-skill.sh 自动解析或拉取</text>
+  <text x="678" y="492" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" fill="#4B5565">ppt-master，失败时明确报依赖 URL。</text>
+
+  <line x1="280" y1="564" x2="1000" y2="564" stroke="#D8E0EA" stroke-width="4"/>
+  <polygon points="1000,564 982,554 982,574" fill="#D8E0EA"/>
+  <circle cx="280" cy="564" r="20" fill="#1E3A5F"/>
+  <circle cx="520" cy="564" r="20" fill="#00A6A6"/>
+  <circle cx="760" cy="564" r="20" fill="#00A6A6"/>
+  <circle cx="1000" cy="564" r="20" fill="#2E7D32"/>
+  <text x="226" y="612" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="16" font-weight="700" fill="#172033">Markdown 源</text>
+  <text x="462" y="612" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="16" font-weight="700" fill="#172033">ppt-master 项目</text>
+  <text x="718" y="612" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="16" font-weight="700" fill="#172033">SVG 页面</text>
+  <text x="944" y="612" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="16" font-weight="700" fill="#172033">Editable PPTX</text>
+
+  <text x="64" y="674" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="12" fill="#7A869A">Evidence: skills/raf-ppt, architecture-spec, ralph-implement, ensure-ppt-master-skill.sh</text>
+  <text x="1190" y="674" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="12" fill="#7A869A">06 / 09</text>
+</svg>

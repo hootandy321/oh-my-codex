@@ -213,16 +213,16 @@ Agent-selection rule:
 
 ## PPT Implementation Rule
 
-For presentation tasks, final implementation MUST use the bundled OMX `ppt-master` skill shipped in the same installation:
+For presentation tasks, final implementation MUST use the `ppt-master` skill dependency. Resolve it with the RAF helper before running any PPT implementation command:
 
 ```bash
-PPT_MASTER_SKILL_DIR=<current-omx-root>/skills/ppt-master
+PPT_MASTER_SKILL_DIR="$(./skills/ralph-implement/scripts/ensure-ppt-master-skill.sh)"
 uv run "$PPT_MASTER_SKILL_DIR/scripts/project_manager.py" ...
 ```
 
-Resolve `<current-omx-root>` from the active OMX package or plugin cache. In a source checkout this is the repository root containing `skills/ppt-master`; inside a Codex plugin install this is the plugin root whose sibling skills include `ppt-master`. Do not depend on a separate external checkout.
+The helper checks `PPT_MASTER_SKILL_DIR`, `${CODEX_HOME:-~/.codex}/external/wxyteam-pptmaster-skill/skills/ppt-master`, and `${CODEX_HOME:-~/.codex}/skills/ppt-master`. If none exists, it tries to clone `http://bitbucket.ci-lab.net/scm/wxyteam/wxyteam-pptmaster-skill.git`. If clone or update fails, report that URL to the user and keep the PPT implementation blocked instead of fabricating a deck through another tool.
 
-Read `$PPT_MASTER_SKILL_DIR/SKILL.md` before implementation. Use `uv run` for bundled `ppt-master` scripts. Completion requires a real editable PPTX under `exports/*.pptx`; an outline or HTML mock is not enough.
+Read `$PPT_MASTER_SKILL_DIR/SKILL.md` before implementation. Use `uv run` for `ppt-master` scripts. Completion requires a real editable PPTX under `exports/*.pptx`; an outline or HTML mock is not enough.
 
 RAF/OMX stage boundary for `ppt-master` Eight Confirmations:
 

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect x="0" y="0" width="1280" height="720" fill="#F7F9FC"/>
+  <text x="64" y="84" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="600" fill="#00A6A6">03 / 定位差异</text>
+  <text x="64" y="126" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="34" font-weight="700" fill="#172033">原 OMX 与 RAF 的定位差异</text>
+  <text x="64" y="164" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="24" font-weight="600" fill="#1E3A5F">原 OMX 是强执行底座；RAF 是加在执行底座上的任务治理层</text>
+
+  <rect x="64" y="216" width="1152" height="52" rx="8" fill="#1E3A5F"/>
+  <text x="100" y="250" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="700" fill="#FFFFFF">维度</text>
+  <text x="338" y="250" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="700" fill="#FFFFFF">原 OMX</text>
+  <text x="798" y="250" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="18" font-weight="700" fill="#FFFFFF">RAF 增量</text>
+
+  <rect x="64" y="276" width="1152" height="62" fill="#FFFFFF" stroke="#D8E0EA"/>
+  <text x="100" y="313" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" font-weight="700" fill="#172033">主要价值</text>
+  <text x="338" y="313" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">调度 skill、agent、runtime 模式</text>
+  <text x="798" y="313" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#172033">约束复杂任务的目标、规格和验收</text>
+
+  <rect x="64" y="338" width="1152" height="62" fill="#E8EEF5" stroke="#D8E0EA"/>
+  <text x="100" y="375" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" font-weight="700" fill="#172033">用户入口</text>
+  <text x="338" y="375" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">选择或触发某个工作流</text>
+  <text x="798" y="375" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#172033">先形成目标契约，再进入规格和执行</text>
+
+  <rect x="64" y="400" width="1152" height="62" fill="#FFFFFF" stroke="#D8E0EA"/>
+  <text x="100" y="437" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" font-weight="700" fill="#172033">执行依据</text>
+  <text x="338" y="437" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">prompt、上下文、role 定义</text>
+  <text x="798" y="437" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#172033">goal contract + architecture/spec</text>
+
+  <rect x="64" y="462" width="1152" height="62" fill="#E8EEF5" stroke="#D8E0EA"/>
+  <text x="100" y="499" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" font-weight="700" fill="#172033">失败处理</text>
+  <text x="338" y="499" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">局部修复为主</text>
+  <text x="798" y="499" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#172033">回溯到目标、规格或实现层</text>
+
+  <rect x="64" y="524" width="1152" height="62" fill="#FFFFFF" stroke="#D8E0EA"/>
+  <text x="100" y="561" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" font-weight="700" fill="#172033">复用方式</text>
+  <text x="338" y="561" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#4B5565">复用工具和模式</text>
+  <text x="798" y="561" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="17" fill="#172033">复用任务组织方法</text>
+
+  <rect x="774" y="292" width="8" height="278" rx="4" fill="#00A6A6"/>
+  <text x="64" y="674" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="12" fill="#7A869A">Evidence: README, skills/raf/SKILL.md, raf-ppt-skill-contract.test.ts</text>
+  <text x="1190" y="674" font-family='"Microsoft YaHei", "PingFang SC", Arial, sans-serif' font-size="12" fill="#7A869A">03 / 09</text>
+</svg>

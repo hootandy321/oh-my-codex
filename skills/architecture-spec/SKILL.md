@@ -132,7 +132,18 @@ For presentation tasks, the spec must include:
   - Visual direction
   - Visible-text density target
   - Speaker notes strategy
+  - Confirmed `ppt-master` design decisions
+    - Canvas format
+    - Page count range
+    - Target audience and use case
+    - Style objective
+    - Color scheme
+    - Icon library choice
+    - Typography plan
+    - Image usage policy
   - `ppt-master` project plan
   - Evidence required for editable PPTX completion
+
+`ppt-master` calls these design decisions the Eight Confirmations. Inside RAF/OMX, treat them as Stage 2 architecture/spec decisions, not as an ad hoc Stage 3 implementation prompt. If any of the eight decisions require user judgment, ask before handing off to `$ralph-implement`; otherwise record the recommended defaults as approved-by-spec assumptions.
 
 Do not generate the deck in this stage. Produce the spec that `$ralph-implement` will execute.

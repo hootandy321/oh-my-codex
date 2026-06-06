@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const repoRoot = new URL('../../..', import.meta.url).pathname;
@@ -27,8 +27,8 @@ describe('RAF stage skill contract', () => {
     assert.match(architectureSpec, /PPT\/deck route/i);
     assert.match(architectureSpec, /Do not generate the deck in this stage/i);
     assert.match(ralphImplement, /PPT Implementation Rule/i);
-    assert.match(ralphImplement, /bundled OMX `ppt-master` skill/i);
-    assert.match(ralphImplement, /<current-omx-root>\/skills\/ppt-master/);
+    assert.match(ralphImplement, /ensure-ppt-master-skill\.sh/);
+    assert.match(ralphImplement, /bitbucket\.ci-lab\.net\/scm\/wxyteam\/wxyteam-pptmaster-skill\.git/);
     assert.doesNotMatch(ralphImplement, /PPT_MASTER_SKILL_DIR=\/Users\//);
     assert.match(ralphImplement, /exports\/\*\.pptx/);
   });
@@ -226,6 +226,18 @@ describe('RAF stage skill contract', () => {
 
     assert.match(rafPpt, /Eight Confirmations belong to `\$architecture-spec`/i);
     assert.match(rafPpt, /consume them instead of re-asking during implementation/i);
+  });
+
+  it('ships a helper for resolving or cloning the external ppt-master dependency', () => {
+    const helperPath = join(repoRoot, 'skills/ralph-implement/scripts/ensure-ppt-master-skill.sh');
+    assert.ok(existsSync(helperPath), 'expected ppt-master dependency helper script');
+    assert.ok((statSync(helperPath).mode & 0o111) !== 0, 'expected helper script to be executable');
+
+    const helper = readFileSync(helperPath, 'utf8');
+    assert.match(helper, /bitbucket\.ci-lab\.net\/scm\/wxyteam\/wxyteam-pptmaster-skill\.git/);
+    assert.match(helper, /PPT_MASTER_SKILL_DIR/);
+    assert.match(helper, /git clone/);
+    assert.match(helper, /exit 2/);
   });
 
   it('documents common RAF agents and presentation-route adapter agents', () => {
