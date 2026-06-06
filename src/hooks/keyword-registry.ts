@@ -27,8 +27,11 @@ export const KEYWORD_TRIGGER_DEFINITIONS: readonly KeywordTriggerDefinition[] = 
 
 
   { keyword: '$prometheus-strict', skill: 'prometheus-strict', priority: 11, guidance: 'Activate Prometheus Strict clean-room interview-driven planner workflow' },
-  { keyword: '$raf', skill: 'raf', priority: 11, guidance: 'Activate RAF three-phase V-model workflow' },
-  { keyword: '$raf-ppt', skill: 'raf-ppt', priority: 12, guidance: 'Activate RAF-PPT three-phase V-model workflow with ppt-master handoff' },
+  { keyword: '$raf', skill: 'raf', priority: 11, guidance: 'Activate complete RAF three-stage workflow' },
+  { keyword: '$goal-setting', skill: 'goal-setting', priority: 12, guidance: 'Activate RAF Stage 1 goal contract workflow' },
+  { keyword: '$architecture-spec', skill: 'architecture-spec', priority: 12, guidance: 'Activate RAF Stage 2 architecture/spec workflow' },
+  { keyword: '$ralph-implement', skill: 'ralph-implement', priority: 12, guidance: 'Activate RAF Stage 3 persistent implementation workflow' },
+  { keyword: '$raf-ppt', skill: 'raf-ppt', priority: 6, guidance: 'Deprecated compatibility shim: route PPT work through generic RAF stage skills' },
 
   { keyword: '$deep-interview', skill: 'deep-interview', priority: 8, guidance: 'Activate Ouroboros-inspired Socratic ambiguity-gated interview workflow' },
   { keyword: 'deep interview', skill: 'deep-interview', priority: 8, guidance: 'Activate Ouroboros-inspired Socratic ambiguity-gated interview workflow' },

@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-06T08:19:26.819Z",
+  "generatedAt": "2026-06-06T09:00:54.560Z",
   "version": "2026.02.28.1",
   "counts": {
-    "skillCount": 52,
+    "skillCount": 55,
     "promptCount": 34,
-    "activeSkillCount": 30,
+    "activeSkillCount": 32,
     "activeAgentCount": 20
   },
   "coreSkills": [
@@ -137,9 +137,30 @@
       "internalRequired": false
     },
     {
-      "name": "raf-ppt",
+      "name": "goal-setting",
       "category": "planning",
       "status": "active",
+      "core": false,
+      "internalRequired": false
+    },
+    {
+      "name": "architecture-spec",
+      "category": "planning",
+      "status": "active",
+      "core": false,
+      "internalRequired": false
+    },
+    {
+      "name": "ralph-implement",
+      "category": "execution",
+      "status": "active",
+      "core": false,
+      "internalRequired": false
+    },
+    {
+      "name": "raf-ppt",
+      "category": "planning",
+      "status": "deprecated",
       "core": false,
       "internalRequired": false
     },

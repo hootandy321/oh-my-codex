@@ -237,11 +237,26 @@ describe('keyword detector team compatibility', () => {
     assert.equal(match.keyword.toLowerCase(), '$best-practice-research');
   });
 
-  it('maps explicit RAF invocations to the RAF V-model workflows', () => {
+  it('maps explicit RAF invocations to generic stage workflows and legacy compatibility shims', () => {
     const raf = detectPrimaryKeyword('$raf turn this into a three-phase V-model task');
     assert.ok(raf);
     assert.equal(raf.skill, 'raf');
     assert.equal(raf.keyword.toLowerCase(), '$raf');
+
+    const goalSetting = detectPrimaryKeyword('$goal-setting freeze this task goal');
+    assert.ok(goalSetting);
+    assert.equal(goalSetting.skill, 'goal-setting');
+    assert.equal(goalSetting.keyword.toLowerCase(), '$goal-setting');
+
+    const architectureSpec = detectPrimaryKeyword('$architecture-spec turn the goal into a spec');
+    assert.ok(architectureSpec);
+    assert.equal(architectureSpec.skill, 'architecture-spec');
+    assert.equal(architectureSpec.keyword.toLowerCase(), '$architecture-spec');
+
+    const ralphImplement = detectPrimaryKeyword('$ralph-implement carry the approved spec to completion');
+    assert.ok(ralphImplement);
+    assert.equal(ralphImplement.skill, 'ralph-implement');
+    assert.equal(ralphImplement.keyword.toLowerCase(), '$ralph-implement');
 
     const rafPpt = detectPrimaryKeyword('$raf-ppt build slides from source.md');
     assert.ok(rafPpt);
@@ -542,6 +557,9 @@ describe('keyword registry coverage', () => {
     assert.ok(registryKeywords.has('$ultragoal'));
     assert.ok(registryKeywords.has('$prometheus-strict'));
     assert.ok(registryKeywords.has('$raf'));
+    assert.ok(registryKeywords.has('$goal-setting'));
+    assert.ok(registryKeywords.has('$architecture-spec'));
+    assert.ok(registryKeywords.has('$ralph-implement'));
     assert.ok(registryKeywords.has('$raf-ppt'));
     assert.ok(registryKeywords.has('ultragoal'));
     assert.ok(registryKeywords.has('autopilot'));

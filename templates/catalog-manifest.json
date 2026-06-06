@@ -123,9 +123,30 @@
       "internalRequired": false
     },
     {
-      "name": "raf-ppt",
+      "name": "goal-setting",
       "category": "planning",
       "status": "active",
+      "core": false,
+      "internalRequired": false
+    },
+    {
+      "name": "architecture-spec",
+      "category": "planning",
+      "status": "active",
+      "core": false,
+      "internalRequired": false
+    },
+    {
+      "name": "ralph-implement",
+      "category": "execution",
+      "status": "active",
+      "core": false,
+      "internalRequired": false
+    },
+    {
+      "name": "raf-ppt",
+      "category": "planning",
+      "status": "deprecated",
       "core": false,
       "internalRequired": false
     },

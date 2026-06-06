@@ -50,8 +50,10 @@
         <li><code>$ralplan</code> - planner/architect/critic consensus planning with durable Architect→Critic approval evidence before execution handoff; may cite separate Scholastic advisory evidence for concept-heavy plans</li>
         <li><code>$plan</code> - supporting strategic planning when you are not using the canonical path</li>
         <li><code>$prometheus-strict</code> - clean-room interview-driven planner that writes durable plans under <code>.omx/plans/prometheus-strict/</code> when warranted and hands off to <code>$ultragoal</code>/<code>$team</code>; credit: Inspired by OMO Prometheus (<code>code-yeongyu/oh-my-openagent</code>), reimplemented from concept under MIT.</li>
-        <li><code>$raf</code> - three-phase V-model workflow: goal contract, perspective inversion, falsifiable variants, rough-loop execution, and feedback backprop.</li>
-        <li><code>$raf-ppt</code> - PPT-first RAF adapter that prepares a ppt-master handoff and validates the model through editable PPTX generation.</li>
+        <li><code>$raf</code> - complete RAF flow that chains goal setting, architecture/spec, persistent implementation, and feedback backprop.</li>
+        <li><code>$goal-setting</code> - RAF Stage 1 goal contract for any artifact type.</li>
+        <li><code>$architecture-spec</code> - RAF Stage 2 architecture, perspectives, variants, and implementation spec.</li>
+        <li><code>$ralph-implement</code> - RAF Stage 3 persistent implementation against the approved goal/spec. PPT tasks route internally to ppt-master.</li>
         <li><code>$best-practice-research</code> - bounded official/upstream best-practice evidence wrapper when current external guidance affects correctness</li>
       </ul>
 
@@ -91,7 +93,9 @@
       <pre><code>$deep-interview "clarify the auth change"
 $ralplan "approve the auth plan and review tradeoffs"
 $prometheus-strict "stress-test the plan before durable execution"
-$raf-ppt "based on source.md, create a technical-share PPT through ppt-master"
+$goal-setting "freeze the target for source.md"
+$architecture-spec "turn the approved goal into an implementation spec"
+$ralph-implement "carry the approved spec to completion"
 $ultragoal "carry the approved plan to completion"
 $team 3:executor "execute the active Ultragoal story in parallel"
 $ralph "carry the approved plan to completion with the explicit legacy loop"

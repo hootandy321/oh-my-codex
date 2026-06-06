@@ -9,32 +9,34 @@ function readSurface(path: string): string {
   return readFileSync(join(repoRoot, path), 'utf8');
 }
 
-describe('RAF-PPT skill contract', () => {
-  it('keeps RAF-PPT tied to the three-phase V-model and ppt-master implementation path', () => {
+describe('RAF stage skill contract', () => {
+  it('keeps the generic three-stage flow tied to artifact routing and ppt-master implementation', () => {
     const raf = readSurface('skills/raf/SKILL.md');
-    const rafPpt = readSurface('skills/raf-ppt/SKILL.md');
+    const goalSetting = readSurface('skills/goal-setting/SKILL.md');
+    const architectureSpec = readSurface('skills/architecture-spec/SKILL.md');
+    const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
 
-    assert.match(raf, /Phase 1 goal contract/i);
-    assert.match(raf, /Phase 2 perspective inversion/i);
-    assert.match(raf, /Phase 3 rough-loop execution/i);
+    assert.match(raf, /\$goal-setting/i);
+    assert.match(raf, /\$architecture-spec/i);
+    assert.match(raf, /\$ralph-implement/i);
     assert.match(raf, /Backprop/i);
-    assert.match(raf, /\$raf-ppt/i);
+    assert.match(raf, /Artifact type is detected inside the stages/i);
 
-    assert.match(rafPpt, /Final PPT implementation MUST use `ppt-master`/);
-    assert.match(rafPpt, /\/Users\/lxy\/lxygit\/wxyteam-pptmaster-skill\/skills\/ppt-master/);
-    assert.match(rafPpt, /Eight Confirmations/);
-    assert.match(rafPpt, /slides\/<source_stem>_PPT/);
-    assert.match(rafPpt, /uv run "\$PPT_MASTER_SKILL_DIR\/scripts\/project_manager\.py"/);
-    assert.match(rafPpt, /design_spec\.md/);
-    assert.match(rafPpt, /spec_lock\.md/);
-    assert.match(rafPpt, /exports\/\*\.pptx/);
-    assert.match(rafPpt, /PptMasterInputError/);
-    assert.match(rafPpt, /SlideImplementationBug/);
+    assert.match(goalSetting, /artifact-agnostic/i);
+    assert.match(goalSetting, /PPT Detection/i);
+    assert.match(architectureSpec, /PPT\/deck route/i);
+    assert.match(architectureSpec, /Do not generate the deck in this stage/i);
+    assert.match(ralphImplement, /PPT Implementation Rule/i);
+    assert.match(ralphImplement, /\/Users\/lxy\/lxygit\/wxyteam-pptmaster-skill\/skills\/ppt-master/);
+    assert.match(ralphImplement, /exports\/\*\.pptx/);
   });
 
-  it('documents common RAF agents and PPT-specific adapter agents', () => {
+  it('documents common RAF agents and presentation-route adapter agents', () => {
     const raf = readSurface('skills/raf/SKILL.md');
-    const rafPpt = readSurface('skills/raf-ppt/SKILL.md');
+    const goalSetting = readSurface('skills/goal-setting/SKILL.md');
+    const architectureSpec = readSurface('skills/architecture-spec/SKILL.md');
+    const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
+    const combined = `${raf}\n${goalSetting}\n${architectureSpec}\n${ralphImplement}`;
 
     for (const name of [
       'raf-goal-setter',
@@ -43,7 +45,7 @@ describe('RAF-PPT skill contract', () => {
       'raf-rough-loop-runner',
       'raf-backprop-critic',
     ]) {
-      assert.match(raf, new RegExp(name));
+      assert.match(combined, new RegExp(name));
     }
 
     for (const name of [
@@ -55,7 +57,7 @@ describe('RAF-PPT skill contract', () => {
       'ppt-reviewer',
       'ppt-master-adapter',
     ]) {
-      assert.match(`${raf}\n${rafPpt}`, new RegExp(name));
+      assert.match(combined, new RegExp(name));
     }
   });
 });
