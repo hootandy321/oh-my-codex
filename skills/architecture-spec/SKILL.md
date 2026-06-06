@@ -23,6 +23,18 @@ Common RAF agents:
 - `raf-variant-designer`
 - `raf-backprop-critic`
 
+OMC architecture/spec agents:
+
+- `architect` - system boundaries, interfaces, artifact architecture, and tradeoffs.
+- `planner` - sequencing, milestones, execution shape, and handoff path.
+- `critic` - adversarial review of the selected variant and falsifier.
+- `test-engineer` - acceptance checks, test shape, and verification strategy.
+- `dependency-expert` - external SDK/API/package feasibility when the spec depends on dependencies.
+- `designer` - UX/UI or visual/product interaction architecture when the artifact has user-facing experience.
+- `writer` - document/report information architecture and narrative clarity.
+- `researcher` - current external evidence or official documentation when it materially affects the spec.
+- `vision` - image, screenshot, slide, or visual-reference interpretation when visual inputs shape the artifact.
+
 PPT/deck route, when detected:
 
 - `ppt-narrative-architect`
@@ -34,11 +46,17 @@ PPT/deck route, when detected:
 
 Code/product route:
 
-- use `architect`, `planner`, `test-engineer`, and relevant implementation specialists.
+- use `architect`, `planner`, `test-engineer`, `dependency-expert`, `critic`, and relevant implementation specialists.
 
 Document/report route:
 
-- use `writer`, `quality-reviewer`, and relevant domain/research specialists.
+- use `writer`, `critic`, `researcher`, and relevant domain specialists.
+
+Agent-selection rule:
+
+- Attach only agents whose output changes the spec or verification plan.
+- Do not spawn every available agent by default.
+- Record the selected agent route in the architecture/spec outline so `$ralph-implement` knows which specialist lanes matter.
 
 ## Required Output
 
@@ -51,6 +69,7 @@ Produce an architecture/spec artifact as a Markdown outline document. The body m
   - Detected artifact type and routing decision
     - State the selected artifact route and the agent stack it implies.
     - Explain why other plausible routes were not selected.
+    - List which OMC support agents were attached and what each one contributed.
   - Perspective map
     - User perspective
       - Explain what the user is trying to accomplish and what would feel wrong to them.

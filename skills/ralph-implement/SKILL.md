@@ -44,11 +44,29 @@ Common RAF agents:
 - `raf-rough-loop-runner`
 - `raf-backprop-critic`
 
+OMC implementation agents:
+
+- `executor` - implementation and refactoring work.
+- `debugger` - root-cause analysis and regression isolation when implementation fails.
+- `test-engineer` - test implementation and test adequacy checks.
+- `verifier` - final completion evidence and claim validation.
+- `architect` - implementation-signoff for architectural or cross-boundary changes.
+- `code-reviewer` - comprehensive code review when source code changed.
+- `code-simplifier` - post-implementation cleanup on changed files when code was modified.
+- `git-master` - commit strategy, staging hygiene, and history cleanup when the task includes publication.
+- `team-executor` - supervised coordinated execution when the approved spec needs parallel lanes.
+
 Use implementation agents based on the spec:
 
 - PPT/deck: `ppt-master-adapter` plus PPT reviewer agents.
 - Code/product: `executor`, `test-engineer`, `debugger`, `architect`.
 - Document/report: `writer`, `quality-reviewer`, relevant domain specialists.
+
+Agent-selection rule:
+
+- Start from the route written by `$architecture-spec`.
+- Add implementation agents only when the evidence or failure mode requires them.
+- Record every attached OMC agent in the implementation record with the reason it was used and the evidence it produced.
 
 ## PPT Implementation Rule
 
@@ -71,6 +89,7 @@ Return an implementation record as a Markdown outline document. The body must us
   - Artifact type and agent route
     - State the route selected from the spec.
     - Name the agents or specialist skills used.
+    - Explain why each OMC support agent was attached or skipped.
   - Implementation steps completed
     - Describe each meaningful implementation step.
     - Tie each step back to the spec requirement it satisfies.

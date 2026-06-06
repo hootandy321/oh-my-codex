@@ -50,6 +50,57 @@ describe('RAF stage skill contract', () => {
     }
   });
 
+  it('reuses deep-interview mechanics for the goal-setting stage', () => {
+    const raf = readSurface('skills/raf/SKILL.md');
+    const goalSetting = readSurface('skills/goal-setting/SKILL.md');
+
+    assert.match(raf, /interview-backed/i);
+    assert.match(raf, /\$deep-interview/);
+    assert.match(goalSetting, /Deep-Interview Reuse Contract/i);
+    assert.match(goalSetting, /one-question-per-round rule/i);
+    assert.match(goalSetting, /ambiguity scoring/i);
+    assert.match(goalSetting, /weakest-dimension targeting/i);
+    assert.match(goalSetting, /Non-goals must be explicit/i);
+    assert.match(goalSetting, /Decision boundaries must be explicit/i);
+    assert.match(goalSetting, /pressure pass/i);
+  });
+
+  it('documents OMC support-agent attachment across RAF stages', () => {
+    const raf = readSurface('skills/raf/SKILL.md');
+    const goalSetting = readSurface('skills/goal-setting/SKILL.md');
+    const architectureSpec = readSurface('skills/architecture-spec/SKILL.md');
+    const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
+
+    assert.match(raf, /OMC Agent Attachment Map/i);
+    for (const name of ['analyst', 'explore', 'researcher', 'critic', 'scholastic']) {
+      assert.match(goalSetting, new RegExp(name));
+    }
+
+    for (const name of [
+      'architect',
+      'planner',
+      'test-engineer',
+      'dependency-expert',
+      'designer',
+      'writer',
+      'vision',
+    ]) {
+      assert.match(architectureSpec, new RegExp(name));
+    }
+
+    for (const name of [
+      'executor',
+      'debugger',
+      'verifier',
+      'code-reviewer',
+      'code-simplifier',
+      'git-master',
+      'team-executor',
+    ]) {
+      assert.match(ralphImplement, new RegExp(name));
+    }
+  });
+
   it('documents common RAF agents and presentation-route adapter agents', () => {
     const raf = readSurface('skills/raf/SKILL.md');
     const goalSetting = readSurface('skills/goal-setting/SKILL.md');

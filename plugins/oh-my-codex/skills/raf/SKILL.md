@@ -13,6 +13,29 @@ description: Complete three-stage RAF flow that routes artifact-specific agents 
 
 Do not split public workflow choice by artifact type. The same three stages apply to PPT, code, documents, reports, research artifacts, and other deliverables. Artifact type is detected inside the stages and used only for agent routing.
 
+The first stage is interview-backed. `$goal-setting` must reuse the `$deep-interview` clarification model when requirements are not already execution-ready: preflight context intake, one focused question per round, ambiguity scoring, weakest-dimension targeting, non-goal and decision-boundary gates, pressure pass, and crystallized handoff artifact.
+
+The workflow can attach OMC agents at each stage, but it must not spawn agents indiscriminately. Each attached agent needs a reason, a contribution, and an output that changes the goal, spec, implementation, or verification evidence.
+
+## OMC Agent Attachment Map
+
+- Goal-setting
+  - `raf-goal-setter` owns the final goal contract.
+  - `analyst` supports requirements clarity, acceptance criteria, and hidden constraints.
+  - `explore` gathers discoverable repo facts before user questioning.
+  - `researcher` gathers external or official evidence when current best practice affects the goal.
+  - `critic` pressure-tests assumptions, non-goals, and decision boundaries.
+  - `scholastic` may advise when the task is concept-heavy or research-framed.
+  - Artifact classifiers such as `ppt-intent-classifier`, `designer`, or `writer` may attach only after the generic goal loop detects the artifact type.
+- Architecture/spec
+  - `raf-perspective-splitter`, `raf-variant-designer`, and `raf-backprop-critic` own the RAF perspective and variant logic.
+  - `architect`, `planner`, `test-engineer`, `dependency-expert`, `designer`, `writer`, `researcher`, `vision`, and `critic` attach according to artifact needs.
+  - PPT tasks attach `ppt-narrative-architect`, `ppt-page-planner`, `ppt-visual-director`, `ppt-speaker-notes-planner`, `ppt-reviewer`, and `ppt-master-adapter`.
+- Ralph implementation
+  - `raf-rough-loop-runner` owns champion execution and evidence collection.
+  - `executor`, `debugger`, `test-engineer`, `verifier`, `architect`, `code-reviewer`, `code-simplifier`, `git-master`, and `team-executor` attach according to the approved spec and observed failures.
+  - PPT tasks use `ppt-master-adapter` and `ppt-master` for final editable PPTX evidence.
+
 ## Artifact Document Format
 
 Every formal document produced by the stages must be a Markdown outline document:

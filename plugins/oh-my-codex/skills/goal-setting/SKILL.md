@@ -9,6 +9,8 @@ description: RAF Stage 1 goal contract for any artifact type before architecture
 
 This skill is artifact-agnostic. Do not ask the user to pick PPT, code, document, report, or research mode up front. Detect the likely artifact type from the request and record that classification as routing context, not as a separate workflow branch.
 
+Goal-setting is the most important RAF stage. It must reuse the `$deep-interview` clarification model rather than acting as a one-shot summarizer.
+
 ## Use When
 
 - The user is describing a desired outcome, product, document, deck, code change, or research artifact.
@@ -17,14 +19,59 @@ This skill is artifact-agnostic. Do not ask the user to pick PPT, code, document
 
 ## Agent Routing
 
-Primary agent:
+Primary agents:
 
 - `raf-goal-setter`
+- `analyst`
 
-Optional artifact classifiers:
+Deep-interview intake support:
+
+- Use the `$deep-interview` mechanism for multi-round clarification whenever the goal is not already execution-ready.
+- Reuse its preflight context intake, one-question-per-round rule, ambiguity scoring, weakest-dimension targeting, readiness gates, pressure pass, and crystallized artifact handoff.
+- Do not replace this with a single "requirements summary" pass. The demand phase must keep asking until the goal is clear enough or the user explicitly accepts residual risk.
+
+OMC support agents:
+
+- `explore` - gather discoverable repo facts before asking the user.
+- `researcher` - gather external or official context when current best practice affects the goal.
+- `critic` - pressure-test assumptions, non-goals, and decision boundaries before freezing the contract.
+- `scholastic` - optional concept-heavy advisory lane when the goal depends on theory, methodology, or research framing.
+
+Artifact classifiers:
 
 - PPT/deck tasks: `ppt-intent-classifier`
-- Other artifact types: use the closest existing specialist or the generic planner/architect roles.
+- UX/product tasks: `designer`
+- Code/product tasks: `architect` only as a boundary advisor, not as the implementation planner.
+- Document/report tasks: `writer`
+- Other artifact types: use the closest existing specialist, but keep `raf-goal-setter` and `analyst` as the owners.
+
+## Deep-Interview Reuse Contract
+
+Run goal-setting as an interview-backed clarification loop unless the prompt already contains explicit intent, outcome, scope, constraints, success criteria, non-goals, and decision boundaries.
+
+- Preflight context intake
+  - Inspect discoverable repo/project facts before asking the user.
+  - Record what was learned from code/docs as evidence, not as a user decision.
+  - Ask the user only for judgment, preference, boundary, or authority decisions that cannot be discovered.
+- Interview loop
+  - Ask exactly one focused question per round.
+  - Target the weakest clarity dimension.
+  - Prioritize intent, outcome, scope, non-goals, and decision boundaries before implementation details.
+  - Re-score ambiguity after each user answer.
+  - Show ambiguity progress in the working interaction when the runtime supports it.
+- Readiness gates
+  - Non-goals must be explicit.
+  - Decision boundaries must be explicit.
+  - At least one pressure pass must revisit an earlier answer with an assumption, evidence, or tradeoff challenge.
+  - Do not freeze the goal while ambiguity is above the selected threshold unless the user explicitly accepts residual risk.
+- Depth profiles
+  - Quick: use when the user asks for a fast pass or the task is already mostly clear.
+  - Standard: default for normal RAF goal-setting.
+  - Deep: use when the artifact is high-stakes, cross-functional, concept-heavy, or repeatedly misunderstood.
+- Crystallization
+  - Write the final goal contract as the stage artifact.
+  - Preserve final ambiguity, unresolved risks, accepted assumptions, non-goals, and decision boundaries in the outline document.
+  - Hand off to `$architecture-spec`; do not implement directly from goal-setting.
 
 ## Required Output
 
@@ -55,6 +102,10 @@ Produce a goal contract as a Markdown outline document. The body must use `-` bu
   - Authority boundary
     - State what the agent can decide independently.
     - State what requires user confirmation because it changes goal, scope, risk, or irreversible output.
+  - Interview evidence
+    - Record the final ambiguity score or qualitative ambiguity state.
+    - Summarize the decisive interview rounds that changed the goal.
+    - Record pressure-pass findings and assumptions that were accepted or rejected.
   - Stop condition and required evidence
     - Define the exact condition for stopping.
     - Name the artifact paths, logs, review records, or verification results expected at completion.
