@@ -93,6 +93,44 @@ describe('omx agents', () => {
     }
   });
 
+  it('refreshes project Markdown prompt agents into native TOML files', async () => {
+    const wd = await mkdtemp(join(tmpdir(), 'omx-agents-cli-refresh-'));
+    const home = join(wd, 'home');
+    try {
+      await mkdir(join(wd, '.codex', 'prompts'), { recursive: true });
+      await mkdir(home, { recursive: true });
+      await writeFile(join(wd, '.codex', 'prompts', 'repo-specialist.md'), [
+        '---',
+        'description: Repo specialist',
+        'model_class: fast',
+        'reasoning_effort: low',
+        'tools: read-only',
+        '---',
+        '',
+        'Use repo-specific evidence first.',
+      ].join('\n'));
+
+      const result = runOmx(wd, ['agents', 'refresh', '--scope', 'project'], {
+        HOME: home,
+        CODEX_HOME: join(home, '.codex'),
+      });
+      if (shouldSkipForSpawnPermissions(result.error)) return;
+
+      assert.equal(result.status, 0, result.stderr || result.stdout);
+      assert.match(result.stdout, /created: repo-specialist/);
+      const agentPath = join(wd, '.codex', 'agents', 'repo-specialist.toml');
+      assert.equal(existsSync(agentPath), true);
+      const content = await readFile(agentPath, 'utf-8');
+      assert.match(content, /^name = "repo-specialist"$/m);
+      assert.match(content, /^description = "Repo specialist"$/m);
+      assert.match(content, /^model_reasoning_effort = "low"$/m);
+      assert.match(content, /model_class: fast/);
+      assert.match(content, /Use repo-specific evidence first/);
+    } finally {
+      await rm(wd, { recursive: true, force: true });
+    }
+  });
+
   it('edits an existing agent via $EDITOR and removes it with --force', async () => {
     const wd = await mkdtemp(join(tmpdir(), 'omx-agents-cli-'));
     const home = join(wd, 'home');

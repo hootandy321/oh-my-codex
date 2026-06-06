@@ -1,4 +1,4 @@
-import { getAgent } from '../agents/definitions.js';
+import { getRegisteredAgent } from '../agents/registry.js';
 import {
   DEFAULT_SPARK_MODEL,
   getAgentReasoningOverride,
@@ -211,7 +211,7 @@ export function resolveAgentReasoningEffort(
 ): TeamReasoningEffort | undefined {
   if (typeof agentType !== 'string' || agentType.trim() === '') return undefined;
   return normalizeOptionalReasoning(getAgentReasoningOverride(agentType, codexHomeOverride))
-    ?? normalizeOptionalReasoning(getAgent(agentType)?.reasoningEffort);
+    ?? normalizeOptionalReasoning(getRegisteredAgent(agentType, { codexHomeOverride })?.reasoningEffort);
 }
 
 export function resolveAgentDefaultModel(
@@ -224,7 +224,10 @@ export function resolveAgentDefaultModel(
   if (normalized.endsWith('-low')) return resolveTeamLowComplexityDefaultModel(codexHomeOverride);
   if (normalized === 'executor') return getMainDefaultModel(codexHomeOverride);
 
-  switch (getAgent(normalized)?.modelClass) {
+  const agent = getRegisteredAgent(normalized, { codexHomeOverride });
+  if (agent?.model) return agent.model;
+
+  switch (agent?.modelClass) {
     case 'fast':
       return resolveTeamLowComplexityDefaultModel(codexHomeOverride);
     case 'frontier':

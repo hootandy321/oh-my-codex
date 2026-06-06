@@ -70,6 +70,10 @@ import {
 import { generateAgentToml } from "../agents/native-config.js";
 import { AGENT_DEFINITIONS } from "../agents/definitions.js";
 import {
+	getRegisteredAgent,
+	SAFE_AGENT_NAME_PATTERN,
+} from "../agents/registry.js";
+import {
 	getCatalogAgentStatusByName,
 	getInstallableNativeAgentNames,
 	isNativeAgentInstallableStatus,
@@ -3164,6 +3168,15 @@ async function refreshNativeAgentConfigs(
 	const nativeAgentNames = manifest
 		? [...getInstallableNativeAgentNames(manifest)].sort()
 		: Object.keys(AGENT_DEFINITIONS).sort();
+	const targetCodexHome = join(agentsDir, "..");
+	const targetProjectRoot = basename(targetCodexHome) === ".codex"
+		? dirname(targetCodexHome)
+		: process.cwd();
+	const scopedPromptsDir = join(targetCodexHome, "prompts");
+	const scopedRegistryOptions = {
+		codexHomeOverride: targetCodexHome,
+		projectRoot: targetProjectRoot,
+	};
 
 	for (const name of nativeAgentNames) {
 		staleCandidateNativeAgentNames.add(name);
@@ -3174,7 +3187,7 @@ async function refreshNativeAgentConfigs(
 			}
 			continue;
 		}
-		const agent = AGENT_DEFINITIONS[name];
+		const agent = getRegisteredAgent(name, scopedRegistryOptions);
 		if (!agent) {
 			if (options.verbose) {
 				console.log(`  skipped native agent ${name}.toml (missing definition)`);
@@ -3183,7 +3196,10 @@ async function refreshNativeAgentConfigs(
 			continue;
 		}
 
-		const promptPath = join(pkgRoot, "prompts", `${name}.md`);
+		const scopedPromptPath = join(scopedPromptsDir, `${name}.md`);
+		const promptPath = existsSync(scopedPromptPath)
+			? scopedPromptPath
+			: join(pkgRoot, "prompts", `${name}.md`);
 		if (!existsSync(promptPath)) {
 			continue;
 		}
@@ -3200,6 +3216,40 @@ async function refreshNativeAgentConfigs(
 			backupContext,
 			options,
 			`native agent ${name}.toml`,
+		);
+	}
+
+	const scopedPromptFiles = existsSync(scopedPromptsDir)
+		? await readdir(scopedPromptsDir)
+		: [];
+	const customNativeAgentNames = scopedPromptFiles
+		.filter((file) => file.endsWith(".md"))
+		.map((file) => file.slice(0, -3))
+		.filter((name) => SAFE_AGENT_NAME_PATTERN.test(name))
+		.filter((name) => !AGENT_DEFINITIONS[name])
+		.filter((name) => !nativeAgentNames.includes(name))
+		.sort();
+	for (const name of customNativeAgentNames) {
+		if (!teamModeEnabled(options.teamMode) && TEAM_MODE_NATIVE_AGENT_NAMES.has(name)) {
+			summary.skipped += 1;
+			continue;
+		}
+		const agent = getRegisteredAgent(name, scopedRegistryOptions);
+		if (!agent) continue;
+		const promptPath = join(scopedPromptsDir, `${name}.md`);
+		const promptContent = existsSync(promptPath)
+			? await readFile(promptPath, "utf-8")
+			: agent.description;
+		const toml = generateAgentToml(agent, promptContent, {
+			codexHomeOverride: targetCodexHome,
+		});
+		await syncManagedContent(
+			toml,
+			join(agentsDir, `${name}.toml`),
+			summary,
+			backupContext,
+			options,
+			`custom native agent ${name}.toml`,
 		);
 	}
 

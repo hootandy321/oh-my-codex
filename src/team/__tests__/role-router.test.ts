@@ -49,6 +49,24 @@ describe('role-router', () => {
         await rm(dir, { recursive: true, force: true });
       }
     });
+
+    it('loads developer instructions from sibling native agent TOML when Markdown is absent', async () => {
+      const root = await mkdtemp(join(tmpdir(), 'omx-role-router-'));
+      const dir = join(root, 'prompts');
+      try {
+        await mkdir(dir, { recursive: true });
+        await mkdir(join(root, 'agents'), { recursive: true });
+        await writeFile(join(root, 'agents', 'custom-agent.toml'), [
+          'name = "custom-agent"',
+          'description = "Custom agent"',
+          'developer_instructions = """Use the custom TOML instructions."""',
+        ].join('\n'));
+        const content = await loadRolePrompt('custom-agent', dir);
+        assert.equal(content, 'Use the custom TOML instructions.');
+      } finally {
+        await rm(root, { recursive: true, force: true });
+      }
+    });
   });
 
   describe('isKnownRole', () => {
@@ -70,6 +88,19 @@ describe('role-router', () => {
         await rm(dir, { recursive: true, force: true });
       }
     });
+
+    it('returns true when sibling native agent TOML exists', async () => {
+      const root = await mkdtemp(join(tmpdir(), 'omx-role-router-'));
+      const dir = join(root, 'prompts');
+      try {
+        await mkdir(dir, { recursive: true });
+        await mkdir(join(root, 'agents'), { recursive: true });
+        await writeFile(join(root, 'agents', 'custom-agent.toml'), 'name = "custom-agent"\n');
+        assert.equal(isKnownRole('custom-agent', dir), true);
+      } finally {
+        await rm(root, { recursive: true, force: true });
+      }
+    });
   });
 
   describe('listAvailableRoles', () => {
@@ -84,6 +115,21 @@ describe('role-router', () => {
         assert.deepEqual(roles, ['designer', 'executor', 'test-engineer']);
       } finally {
         await rm(dir, { recursive: true, force: true });
+      }
+    });
+
+    it('lists roles from prompt files and sibling native agent TOML files', async () => {
+      const root = await mkdtemp(join(tmpdir(), 'omx-role-router-'));
+      const dir = join(root, 'prompts');
+      try {
+        await mkdir(dir, { recursive: true });
+        await mkdir(join(root, 'agents'), { recursive: true });
+        await writeFile(join(dir, 'executor.md'), '# Executor');
+        await writeFile(join(root, 'agents', 'custom-agent.toml'), 'name = "custom-agent"\n');
+        const roles = await listAvailableRoles(dir);
+        assert.deepEqual(roles, ['custom-agent', 'executor']);
+      } finally {
+        await rm(root, { recursive: true, force: true });
       }
     });
 

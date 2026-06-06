@@ -213,7 +213,7 @@ Ralph / Ralplan execution gate:
 ---
 
 <skills>
-Skills are workflow commands. Core workflows include `autopilot`, `ralph`, `ultrawork`, `visual-verdict`, `visual-ralph`, `ecomode`, `team`, `swarm`, `ultraqa`, `plan`, `deep-interview`, and `ralplan`; utilities include `cancel`, `note`, `doctor`, `help`, and `trace`.
+Skills are workflow commands. Core workflows include `autopilot`, `ralph`, `ultrawork`, `visual-verdict`, `visual-ralph`, `ecomode`, `team`, `swarm`, `ultraqa`, `plan`, `deep-interview`, `ralplan`, `raf`, and `raf-ppt`; utilities include `cancel`, `note`, `doctor`, `help`, and `trace`.
 </skills>
 
 ---

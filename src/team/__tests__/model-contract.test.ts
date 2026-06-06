@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
@@ -199,6 +199,33 @@ describe('team model contract', () => {
       assert.equal(resolveAgentDefaultModel('style-reviewer'), expectedLowComplexityModel());
       assert.equal(resolveAgentReasoningEffort('style-reviewer'), 'low');
     });
+  });
+
+  it('maps project-defined Markdown agents through OMX model and reasoning logic', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'omx-model-contract-custom-agent-'));
+    const codexHome = join(root, 'codex-home');
+    const previousCwd = process.cwd();
+    try {
+      await mkdir(join(root, '.codex', 'prompts'), { recursive: true });
+      await mkdir(codexHome, { recursive: true });
+      await writeFile(join(root, '.codex', 'prompts', 'repo-fast.md'), [
+        '---',
+        'description: Repo fast lane',
+        'model_class: fast',
+        'reasoning_effort: low',
+        'tools: analysis',
+        '---',
+        '',
+        'Fast repo triage.',
+      ].join('\n'));
+
+      process.chdir(root);
+      assert.equal(resolveAgentDefaultModel('repo-fast', codexHome), expectedLowComplexityModel());
+      assert.equal(resolveAgentReasoningEffort('repo-fast', codexHome), 'low');
+    } finally {
+      process.chdir(previousCwd);
+      await rm(root, { recursive: true, force: true });
+    }
   });
 });
 

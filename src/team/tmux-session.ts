@@ -11,7 +11,7 @@ import {
   LONG_CONFIG_FLAG,
   MODEL_FLAG,
 } from '../cli/constants.js';
-import { getAgent } from '../agents/definitions.js';
+import { getRegisteredAgent } from '../agents/registry.js';
 import {
   buildCapturePaneArgv as sharedBuildCapturePaneArgv,
   buildVisibleCapturePaneArgv as sharedBuildVisibleCapturePaneArgv,
@@ -840,7 +840,7 @@ export function resolveTeamWorkerCliPlan(
 function shouldGrantExecutionBypassForRole(workerRole?: string): boolean {
   const normalizedRole = workerRole?.trim().toLowerCase();
   if (!normalizedRole) return true;
-  const agent = getAgent(normalizedRole);
+  const agent = getRegisteredAgent(normalizedRole);
   if (!agent) return true;
   return agent.tools === 'execution';
 }

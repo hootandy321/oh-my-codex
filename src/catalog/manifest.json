@@ -96,6 +96,18 @@
       "core": false
     },
     {
+      "name": "raf",
+      "category": "planning",
+      "status": "active",
+      "core": false
+    },
+    {
+      "name": "raf-ppt",
+      "category": "planning",
+      "status": "active",
+      "core": false
+    },
+    {
       "name": "best-practice-research",
       "category": "planning",
       "status": "active",
@@ -292,6 +304,12 @@
       "category": "utility",
       "status": "internal",
       "internalRequired": true
+    },
+    {
+      "name": "agents-refresh",
+      "category": "utility",
+      "status": "active",
+      "core": false
     }
   ],
   "agents": [

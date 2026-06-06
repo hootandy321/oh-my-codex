@@ -9,11 +9,15 @@ import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';
 import { existsSync } from 'fs';
 import type { TeamPhase } from './orchestrator.js';
+import {
+  SAFE_AGENT_NAME_PATTERN,
+  loadNativeAgentInstructionsFromPromptsDir,
+} from '../agents/registry.js';
 
 // ─── Layer 1: Prompt Loading ────────────────────────────────────────────────
 
 /** Role names must be lowercase alphanumeric with hyphens (e.g., 'test-engineer'). */
-const SAFE_ROLE_PATTERN = /^[a-z][a-z0-9-]*$/;
+const SAFE_ROLE_PATTERN = SAFE_AGENT_NAME_PATTERN;
 
 /**
  * Load behavioral prompt content for a given agent role.
@@ -29,7 +33,7 @@ export async function loadRolePrompt(
     const content = await readFile(filePath, 'utf-8');
     return content.trim() || null;
   } catch {
-    return null;
+    return loadNativeAgentInstructionsFromPromptsDir(role, promptsDir);
   }
 }
 
@@ -38,7 +42,8 @@ export async function loadRolePrompt(
  */
 export function isKnownRole(role: string, promptsDir: string): boolean {
   if (!SAFE_ROLE_PATTERN.test(role)) return false;
-  return existsSync(join(promptsDir, `${role}.md`));
+  return existsSync(join(promptsDir, `${role}.md`))
+    || existsSync(join(promptsDir, '..', 'agents', `${role}.toml`));
 }
 
 /**
@@ -47,11 +52,16 @@ export function isKnownRole(role: string, promptsDir: string): boolean {
  */
 export async function listAvailableRoles(promptsDir: string): Promise<string[]> {
   try {
-    const files = await readdir(promptsDir);
-    return files
+    const promptFiles = await readdir(promptsDir).catch(() => []);
+    const agentFiles = await readdir(join(promptsDir, '..', 'agents')).catch(() => []);
+    return [...new Set([
+      ...promptFiles
       .filter(f => f.endsWith('.md'))
-      .map(f => f.slice(0, -3))
-      .sort();
+      .map(f => f.slice(0, -3)),
+      ...agentFiles
+      .filter(f => f.endsWith('.toml'))
+      .map(f => f.slice(0, -5)),
+    ])].filter(role => SAFE_ROLE_PATTERN.test(role)).sort();
   } catch {
     return [];
   }

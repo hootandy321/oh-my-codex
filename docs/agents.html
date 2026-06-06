@@ -64,6 +64,13 @@
           <tr><td>git-master</td><td>medium</td><td>Commit strategy and history hygiene.</td><td><code>git-master "prepare clean commit plan"</code></td></tr>
           <tr><td>code-simplifier (internal)</td><td>high</td><td>Post-stop code simplification and cleanup automation.</td><td><code>code-simplifier "simplify touched files"</code></td></tr>
           <tr><td>researcher</td><td>medium</td><td>Reference and external documentation research.</td><td><code>researcher "collect official API docs"</code></td></tr>
+          <tr><td>ppt-intent-classifier</td><td>medium</td><td>RAF-PPT scenario, audience, formality, and success-standard classification.</td><td><code>ppt-intent-classifier "classify this deck request"</code></td></tr>
+          <tr><td>ppt-narrative-architect</td><td>high</td><td>RAF-PPT whole-deck argument, chapter flow, and slide-title chain.</td><td><code>ppt-narrative-architect "map this source into a deck story"</code></td></tr>
+          <tr><td>ppt-page-planner</td><td>high</td><td>RAF-PPT slide-level intent, evidence, density, and acceptance checks.</td><td><code>ppt-page-planner "make page intents"</code></td></tr>
+          <tr><td>ppt-visual-director</td><td>high</td><td>RAF-PPT visual direction, template fit, diagram strategy, and image policy.</td><td><code>ppt-visual-director "recommend deck visuals"</code></td></tr>
+          <tr><td>ppt-speaker-notes-planner</td><td>medium</td><td>RAF-PPT boundary between visible slide text and full speaker notes.</td><td><code>ppt-speaker-notes-planner "plan notes"</code></td></tr>
+          <tr><td>ppt-reviewer</td><td>high</td><td>RAF-PPT narrative, visual, readability, notes, and reviewer-attack evaluation.</td><td><code>ppt-reviewer "review this generated deck"</code></td></tr>
+          <tr><td>ppt-master-adapter</td><td>high</td><td>RAF-PPT bridge from RAF artifacts into the external ppt-master skill.</td><td><code>ppt-master-adapter "prepare ppt-master handoff"</code></td></tr>
         </tbody>
       </table>
 
@@ -83,6 +90,11 @@
         <thead><tr><th>Agent</th><th>Model</th><th>Description</th><th>Example</th></tr></thead>
         <tbody>
           <tr><td>critic</td><td>high</td><td>Critical challenge for plans and designs.</td><td><code>critic "challenge this plan"</code></td></tr>
+          <tr><td>raf-goal-setter</td><td>high</td><td>RAF Phase 1 goal contract, rubric, non-goals, and authority boundaries.</td><td><code>raf-goal-setter "freeze this task goal"</code></td></tr>
+          <tr><td>raf-perspective-splitter</td><td>high</td><td>RAF Phase 2 artifact-specific viewpoints and success dimensions.</td><td><code>raf-perspective-splitter "split this goal into views"</code></td></tr>
+          <tr><td>raf-variant-designer</td><td>high</td><td>RAF Phase 2 falsifiable champion/challenger variant design.</td><td><code>raf-variant-designer "create variants"</code></td></tr>
+          <tr><td>raf-rough-loop-runner</td><td>high</td><td>RAF Phase 3 champion trial, evidence, and iteration ledger.</td><td><code>raf-rough-loop-runner "run the champion trial"</code></td></tr>
+          <tr><td>raf-backprop-critic</td><td>high</td><td>RAF feedback classification into goal, perspective, variant, adapter, or implementation layers.</td><td><code>raf-backprop-critic "classify this feedback"</code></td></tr>
           <tr><td>scholastic</td><td>high</td><td>Ontology-first review for category mistakes, assumptions, modalities, and minimal repairs.</td><td><code>scholastic "check this spec ontology"</code></td></tr>
           <tr><td>vision</td><td>medium</td><td>Image/screenshot and diagram analysis.</td><td><code>vision "review this screenshot"</code></td></tr>
         </tbody>

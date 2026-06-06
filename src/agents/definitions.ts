@@ -7,8 +7,10 @@
 export interface AgentDefinition {
   name: string;
   description: string;
-  reasoningEffort: 'low' | 'medium' | 'high';
+  reasoningEffort: 'low' | 'medium' | 'high' | 'xhigh';
   /** Optional exact model pin for roles that should bypass tier defaults. */
+  model?: string;
+  modelProvider?: string;
   exactModel?: 'gpt-5.4-mini';
   posture: 'frontier-orchestrator' | 'deep-worker' | 'fast-lane';
   modelClass: 'frontier' | 'standard' | 'fast';

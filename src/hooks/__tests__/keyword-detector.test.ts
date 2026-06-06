@@ -237,6 +237,23 @@ describe('keyword detector team compatibility', () => {
     assert.equal(match.keyword.toLowerCase(), '$best-practice-research');
   });
 
+  it('maps explicit RAF invocations to the RAF V-model workflows', () => {
+    const raf = detectPrimaryKeyword('$raf turn this into a three-phase V-model task');
+    assert.ok(raf);
+    assert.equal(raf.skill, 'raf');
+    assert.equal(raf.keyword.toLowerCase(), '$raf');
+
+    const rafPpt = detectPrimaryKeyword('$raf-ppt build slides from source.md');
+    assert.ok(rafPpt);
+    assert.equal(rafPpt.skill, 'raf-ppt');
+    assert.equal(rafPpt.keyword.toLowerCase(), '$raf-ppt');
+
+    const pluginPrefixed = detectPrimaryKeyword('$oh-my-codex:raf-ppt build slides');
+    assert.ok(pluginPrefixed);
+    assert.equal(pluginPrefixed.skill, 'raf-ppt');
+    assert.equal(pluginPrefixed.keyword.toLowerCase(), '$oh-my-codex:raf-ppt');
+  });
+
   it('maps intentful ultragoal prose without triggering artifact path mentions', () => {
     const intentful = detectPrimaryKeyword('please run ultragoal workflow for this launch');
     assert.ok(intentful);
@@ -524,6 +541,8 @@ describe('keyword registry coverage', () => {
     assert.ok(registryKeywords.has('$autoresearch'));
     assert.ok(registryKeywords.has('$ultragoal'));
     assert.ok(registryKeywords.has('$prometheus-strict'));
+    assert.ok(registryKeywords.has('$raf'));
+    assert.ok(registryKeywords.has('$raf-ppt'));
     assert.ok(registryKeywords.has('ultragoal'));
     assert.ok(registryKeywords.has('autopilot'));
   });

@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-05-24T12:14:18.921Z",
+  "generatedAt": "2026-06-06T08:19:26.819Z",
   "version": "2026.02.28.1",
   "counts": {
-    "skillCount": 49,
+    "skillCount": 52,
     "promptCount": 34,
-    "activeSkillCount": 27,
+    "activeSkillCount": 30,
     "activeAgentCount": 20
   },
   "coreSkills": [
@@ -124,6 +124,20 @@
     },
     {
       "name": "prometheus-strict",
+      "category": "planning",
+      "status": "active",
+      "core": false,
+      "internalRequired": false
+    },
+    {
+      "name": "raf",
+      "category": "planning",
+      "status": "active",
+      "core": false,
+      "internalRequired": false
+    },
+    {
+      "name": "raf-ppt",
       "category": "planning",
       "status": "active",
       "core": false,
@@ -367,6 +381,13 @@
       "status": "internal",
       "core": false,
       "internalRequired": true
+    },
+    {
+      "name": "agents-refresh",
+      "category": "utility",
+      "status": "active",
+      "core": false,
+      "internalRequired": false
     }
   ],
   "agents": [

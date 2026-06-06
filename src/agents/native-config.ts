@@ -7,6 +7,7 @@ import { existsSync, readFileSync } from "fs";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import { join } from "path";
 import { AGENT_DEFINITIONS, AgentDefinition } from "./definitions.js";
+import { getRegisteredAgent, getRegisteredAgentNames } from "./registry.js";
 import { readCatalogManifest } from "../catalog/reader.js";
 import type { CatalogManifest } from "../catalog/schema.js";
 import { getInstallableNativeAgentNames } from "./policy.js";
@@ -178,6 +179,10 @@ function resolveAgentModel(
     return agent.exactModel;
   }
 
+  if (agent.model) {
+    return agent.model;
+  }
+
   if (agent.name === "executor") {
     return resolveFrontierModel(options);
   }
@@ -254,7 +259,7 @@ export function composeRoleInstructionsForRole(
   promptContent: string,
   resolvedModel?: string,
 ): string {
-  const agent = AGENT_DEFINITIONS[roleName];
+  const agent = getRegisteredAgent(roleName);
   return composeRoleInstructions(
     promptContent,
     agent
@@ -334,7 +339,8 @@ export function generateAgentToml(
   options: AgentModelResolutionOptions = {},
 ): string {
   const resolvedModel = resolveAgentModel(agent, options);
-  const resolvedModelProvider = getCodexConfigRootModelProvider(options.codexHomeOverride);
+  const resolvedModelProvider = agent.modelProvider
+    ?? getCodexConfigRootModelProvider(options.codexHomeOverride);
   return generateStandaloneAgentToml({
     name: agent.name,
     description: agent.description,
@@ -385,14 +391,18 @@ export async function installNativeAgentConfigs(
   const installableAgentNames = allowUncatalogedDefinitions
     ? new Set(Object.keys(AGENT_DEFINITIONS))
     : getInstallableNativeAgentNames(catalogManifest ?? readCatalogManifest(pkgRoot));
+  const registry = loadRegistryForInstall(pkgRoot, codexHomeOverride);
 
   for (const name of [...installableAgentNames].sort()) {
-    const agent = AGENT_DEFINITIONS[name];
+    const agent = registry[name];
     if (!agent) {
       if (verbose) console.log(`  skip ${name} (no agent definition)`);
       continue;
     }
-    const promptPath = join(pkgRoot, "prompts", `${name}.md`);
+    const scopedPromptPath = join(codexHomeOverride, "prompts", `${name}.md`);
+    const promptPath = existsSync(scopedPromptPath)
+      ? scopedPromptPath
+      : join(pkgRoot, "prompts", `${name}.md`);
     if (!existsSync(promptPath)) {
       if (verbose) console.log(`  skip ${name} (no prompt file)`);
       continue;
@@ -415,4 +425,18 @@ export async function installNativeAgentConfigs(
   }
 
   return count;
+}
+
+function loadRegistryForInstall(
+  pkgRoot: string,
+  codexHomeOverride: string,
+): Record<string, AgentDefinition> {
+  const projectRoot = codexHomeOverride.endsWith(`${join("", ".codex")}`)
+    ? join(codexHomeOverride, "..")
+    : pkgRoot;
+  return Object.fromEntries(
+    getRegisteredAgentNames({ projectRoot, codexHomeOverride })
+      .map((name) => [name, getRegisteredAgent(name, { projectRoot, codexHomeOverride })])
+      .filter((entry): entry is [string, AgentDefinition] => Boolean(entry[1])),
+  );
 }

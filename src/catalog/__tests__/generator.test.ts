@@ -59,9 +59,14 @@ describe('catalog reader/contract', () => {
       ),
     );
     assert.ok(contract.skills.some((s) => s.name === 'prometheus-strict' && s.status === 'active'));
+    assert.ok(contract.skills.some((s) => s.name === 'raf' && s.status === 'active'));
+    assert.ok(contract.skills.some((s) => s.name === 'raf-ppt' && s.status === 'active'));
+    assert.ok(contract.skills.some((s) => s.name === 'agents-refresh' && s.status === 'active'));
     assert.ok(contract.agents.some((a) => a.name === 'prometheus-strict-metis' && a.status === 'active'));
     assert.ok(contract.agents.some((a) => a.name === 'prometheus-strict-momus' && a.status === 'active'));
     assert.ok(contract.agents.some((a) => a.name === 'prometheus-strict-oracle' && a.status === 'active'));
+    assert.ok(!contract.agents.some((a) => a.name === 'raf-goal-setter'));
+    assert.ok(!contract.agents.some((a) => a.name === 'ppt-master-adapter'));
   });
 
   it('template manifest can be synced from source manifest', async () => {
