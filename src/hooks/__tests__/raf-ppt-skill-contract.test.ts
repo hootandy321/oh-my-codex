@@ -101,6 +101,41 @@ describe('RAF stage skill contract', () => {
     }
   });
 
+  it('defines continuous implementation backlog and Codex supervision for RAF implementation', () => {
+    const raf = readSurface('skills/raf/SKILL.md');
+    const architectureSpec = readSurface('skills/architecture-spec/SKILL.md');
+    const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
+
+    assert.match(architectureSpec, /Implementation backlog/i);
+    assert.match(architectureSpec, /Supervision plan/i);
+    assert.match(ralphImplement, /Continuous Implementation Backlog/i);
+    assert.match(ralphImplement, /pending/);
+    assert.match(ralphImplement, /active/);
+    assert.match(ralphImplement, /verifying/);
+    assert.match(ralphImplement, /reviewing/);
+    assert.match(ralphImplement, /backprop/);
+    assert.match(ralphImplement, /Continue to the next backlog item/i);
+    assert.match(ralphImplement, /Codex is the main supervisor/i);
+    assert.match(raf, /Codex remains the main supervisor/i);
+  });
+
+  it('documents child-agent configuration and task-type governance for implementation', () => {
+    const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
+
+    assert.match(ralphImplement, /Child-Agent And Model Configuration/i);
+    assert.match(ralphImplement, /agent_type: "executor"/);
+    assert.match(ralphImplement, /agent_type: "debugger"/);
+    assert.match(ralphImplement, /agent_type: "verifier"/);
+    assert.match(ralphImplement, /reasoning_effort/i);
+    assert.match(ralphImplement, /do not hardcode stale model names/i);
+    assert.match(ralphImplement, /Governance By Task Type/i);
+    assert.match(ralphImplement, /Code implementation/i);
+    assert.match(ralphImplement, /PPT\/deck implementation/i);
+    assert.match(ralphImplement, /Document\/report implementation/i);
+    assert.match(ralphImplement, /Research implementation/i);
+    assert.match(ralphImplement, /Child-agent supervision/i);
+  });
+
   it('documents common RAF agents and presentation-route adapter agents', () => {
     const raf = readSurface('skills/raf/SKILL.md');
     const goalSetting = readSurface('skills/goal-setting/SKILL.md');

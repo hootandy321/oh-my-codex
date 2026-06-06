@@ -98,9 +98,18 @@ Produce an architecture/spec artifact as a Markdown outline document. The body m
   - Implementation spec with acceptance checks
     - Decompose the artifact into executable pieces.
     - Attach acceptance checks to each piece.
+  - Implementation backlog
+    - Convert champion and viable challenger ideas into an ordered backlog of implementable work items.
+    - Mark each item as `must`, `should`, `could`, or `defer`.
+    - For each item, record expected value, risk, dependencies, required agents, verification evidence, and stop/continue criteria.
+    - Keep challenger ideas that are not selected for the first pass when they may become the next implementation item after the current one passes.
   - Verification plan
     - Name commands, inspections, review passes, or artifact checks.
     - State what evidence must be captured.
+  - Supervision plan
+    - State how Codex as the main supervisor will review child-agent work.
+    - Define which checks can be delegated and which approval gates must remain with the main Codex supervisor.
+    - Define when implementation should continue to the next backlog item, backprop to spec/goal, or stop for user authority.
   - Backprop rules
     - Define which failures return to `$goal-setting`.
     - Define which failures return to `$architecture-spec`.

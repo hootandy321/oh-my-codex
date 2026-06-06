@@ -35,6 +35,7 @@ The workflow can attach OMC agents at each stage, but it must not spawn agents i
   - `raf-rough-loop-runner` owns champion execution and evidence collection.
   - `executor`, `debugger`, `test-engineer`, `verifier`, `architect`, `code-reviewer`, `code-simplifier`, `git-master`, and `team-executor` attach according to the approved spec and observed failures.
   - PPT tasks use `ppt-master-adapter` and `ppt-master` for final editable PPTX evidence.
+  - Codex remains the main supervisor: it owns the adaptive backlog, delegates bounded child-agent work, reviews evidence, decides whether to continue to the next item, and enforces backprop/stop criteria.
 
 ## Artifact Document Format
 

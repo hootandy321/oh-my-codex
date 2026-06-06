@@ -5,7 +5,7 @@ description: RAF Stage 3 persistent Ralph-style implementation against an approv
 
 # Ralph Implement
 
-`$ralph-implement` is RAF Stage 3. It consumes the goal contract and architecture/spec artifacts, then runs persistent implementation until the artifact satisfies the rubric and verification evidence is collected.
+`$ralph-implement` is RAF Stage 3. It consumes the goal contract and architecture/spec artifacts, then runs persistent implementation until the artifact satisfies the rubric, verification evidence is collected, and the implementation backlog is exhausted or intentionally stopped.
 
 This skill is artifact-agnostic. It does not choose a public PPT/code/document branch. It reads the spec's artifact type and routes implementation accordingly.
 
@@ -14,6 +14,7 @@ This skill is artifact-agnostic. It does not choose a public PPT/code/document b
 - A goal contract and architecture/spec are already available.
 - The user wants the approved spec carried to completion.
 - The task needs a persistent loop with verification and backprop, not a one-shot attempt.
+- The task should continue beyond the first completed implementation item and pick up the next approved idea, variant, or backlog item.
 
 ## Prerequisites
 
@@ -28,14 +29,107 @@ If the spec is missing, route back to `$architecture-spec`. If the goal is missi
 ## Implementation Loop
 
 1. Load the goal contract and architecture/spec.
-2. Confirm artifact type and selected agent route.
-3. Execute the champion approach.
-4. Collect fresh evidence.
-5. Run the falsifier and acceptance checks.
-6. Classify failures with `raf-backprop-critic`.
-7. Fix implementation failures locally.
-8. Backprop goal/spec failures to the owning earlier stage.
-9. Repeat until the rubric passes or a real blocker is proven.
+2. Confirm artifact type, selected agent route, implementation backlog, and supervision plan.
+3. Select the next backlog item using the priority, dependency, risk, and value criteria from the spec.
+4. Execute that item through the appropriate child agents or direct implementation lane.
+5. Collect fresh evidence.
+6. Run the falsifier and acceptance checks for the current item.
+7. Classify failures with `raf-backprop-critic`.
+8. Fix implementation failures locally.
+9. Backprop goal/spec failures to the owning earlier stage.
+10. If the item passes, mark it complete, update the backlog, and select the next implementable item.
+11. Repeat until all required backlog items are complete, the goal rubric is satisfied, or a real blocker/user authority gate is proven.
+
+## Continuous Implementation Backlog
+
+The implementation stage is not limited to the first champion pass. It should keep working through an approved adaptive backlog.
+
+- Backlog sources
+  - Champion implementation pieces from `$architecture-spec`.
+  - Challenger ideas that become worthwhile after the first implementation passes.
+  - Verification-driven follow-ups discovered during tests, reviews, or usage evidence.
+  - Backprop items returned from implementation failures that do not require a new user decision.
+- Item lifecycle
+  - `pending` - approved but not started.
+  - `active` - currently owned by the main Codex supervisor or a child agent.
+  - `verifying` - implementation appears complete and evidence is being collected.
+  - `reviewing` - Codex supervisor and review agents are checking whether the evidence is sufficient.
+  - `done` - accepted with evidence.
+  - `backprop` - returned to `$architecture-spec` or `$goal-setting`.
+  - `blocked` - cannot proceed without missing input, dependency, authority, or environmental change.
+  - `deferred` - intentionally not pursued in this run.
+- Continue criteria
+  - Continue to the next backlog item when the current item is implemented, tests/reviews pass, and the remaining item is still inside the approved goal/spec boundary.
+  - Continue to a challenger item when the champion item passes but the spec says the challenger would add value and does not violate scope.
+  - Continue to hardening/refinement when verification reveals improvement work that is inside the current implementation authority.
+- Stop criteria
+  - Stop when all `must` and selected `should` items are done and the goal rubric passes.
+  - Stop when the next item would change goal, scope, non-goals, or authority.
+  - Stop when repeated failures prove the spec or goal is wrong and backprop is required.
+  - Stop when the user explicitly pauses or cancels.
+
+## Codex Supervisor Role
+
+Codex is the main supervisor. Child agents can implement, test, critique, research, or verify, but they do not own the adaptive loop.
+
+- Main-supervisor responsibilities
+  - Own the backlog and decide which item is next.
+  - Translate the approved spec into bounded child-agent assignments.
+  - Review child-agent outputs before merging them into the main implementation record.
+  - Enforce non-goals, decision boundaries, and stop criteria.
+  - Decide whether a failure is local implementation work, backlog reprioritization, `$architecture-spec` backprop, `$goal-setting` backprop, or a user authority gate.
+  - Keep the implementation record current after every item.
+- Child-agent responsibilities
+  - Work only on the assigned backlog item.
+  - Return evidence, changed files/artifacts, risks, and recommended follow-up.
+  - Escalate scope conflicts, shared-file conflicts, missing authority, or unclear acceptance criteria to the main supervisor.
+  - Avoid recursively launching their own workflow unless explicitly assigned as a team/supervised lane.
+- Review gates
+  - Every implementation item needs fresh evidence before it can move to `done`.
+  - Code changes require test/build/lint evidence appropriate to risk.
+  - Source-code changes should receive independent `code-reviewer` and/or `architect` review when risk is moderate or higher.
+  - Claims from the implementing agent are not enough; the supervisor must inspect evidence or receive independent verifier evidence.
+
+## Child-Agent And Model Configuration
+
+Use installed native agent types whenever available. Configure capability through `agent_type` and `reasoning_effort`; do not hardcode stale model names unless the user explicitly asks for a provider/model override.
+
+- Default dispatch pattern
+  - Exploration: `agent_type: "explore"`, `reasoning_effort: "low"`.
+  - Implementation: `agent_type: "executor"`, `reasoning_effort: "medium"` or `"high"` depending on risk.
+  - Failure diagnosis: `agent_type: "debugger"`, `reasoning_effort: "high"`.
+  - Test strategy or test implementation: `agent_type: "test-engineer"`, `reasoning_effort: "medium"` or `"high"`.
+  - Architecture review: `agent_type: "architect"`, `reasoning_effort: "high"`.
+  - Completion verification: `agent_type: "verifier"`, `reasoning_effort: "high"`.
+  - Code review: `agent_type: "code-reviewer"`, `reasoning_effort: "high"`.
+  - Parallel supervised execution: `agent_type: "team-executor"` only when the spec has independent lanes and the main supervisor can integrate them.
+- Configuration rules
+  - Prefer inherited model configuration from OMX/Codex and the generated native-agent TOMLs.
+  - Use `reasoning_effort` to tune depth before overriding `model`.
+  - If the user wants other models or providers, capture that as an implementation policy in the spec before dispatch.
+  - Record every dispatched child agent in the implementation record with agent type, purpose, item id, reasoning effort, and evidence returned.
+  - Do not let child agents silently broaden scope or mark the whole task complete.
+
+## Governance By Task Type
+
+Different implementation tasks need different supervision evidence.
+
+- Code implementation
+  - Required governance: scoped backlog item, changed-file inventory, tests/build/lint, regression risk note, review gate for moderate risk.
+  - Continue condition: current item passes and the next backlog item is still inside approved scope.
+  - Escalate when API contracts, data migrations, security boundaries, or user-visible behavior change beyond the spec.
+- PPT/deck implementation
+  - Required governance: `ppt-master` project evidence, source path, notes, SVG output, exported PPTX, visual/readability review.
+  - Continue condition: exported deck passes review and remaining backlog items are slide improvements or approved challenger refinements.
+  - Escalate when narrative direction, audience, style, or source interpretation changes the goal contract.
+- Document/report implementation
+  - Required governance: outline/source traceability, factual checks, reviewer pass, final artifact path.
+  - Continue condition: the current document section passes and the next section/backlog item remains inside the approved narrative and evidence boundary.
+  - Escalate when claims, tone, public/private boundary, or audience commitments change.
+- Research implementation
+  - Required governance: source ledger, citation quality, claim/evidence mapping, uncertainty ledger.
+  - Continue condition: current research question is answered and the next question is in the approved research backlog.
+  - Escalate when evidence changes the research question, scope, or conclusion strength.
 
 ## Agent Routing
 
@@ -90,6 +184,12 @@ Return an implementation record as a Markdown outline document. The body must us
     - State the route selected from the spec.
     - Name the agents or specialist skills used.
     - Explain why each OMC support agent was attached or skipped.
+  - Adaptive backlog
+    - List each item with status, owner, evidence, and next action.
+    - Explain why the supervisor continued, stopped, deferred, or backpropagated after each item.
+  - Child-agent supervision
+    - Record child agent type, assigned item, reasoning effort, returned evidence, and supervisor verdict.
+    - Record any model/provider override requested by the user or inherited from configuration.
   - Implementation steps completed
     - Describe each meaningful implementation step.
     - Tie each step back to the spec requirement it satisfies.
