@@ -59,16 +59,16 @@ describe('catalog reader/contract', () => {
       ),
     );
     assert.ok(contract.skills.some((s) => s.name === 'prometheus-strict' && s.status === 'active'));
-    assert.ok(contract.skills.some((s) => s.name === 'raf' && s.status === 'active'));
+    assert.ok(contract.skills.some((s) => s.name === 'gsi' && s.status === 'active'));
     assert.ok(contract.skills.some((s) => s.name === 'goal-setting' && s.status === 'active'));
     assert.ok(contract.skills.some((s) => s.name === 'architecture-spec' && s.status === 'active'));
     assert.ok(contract.skills.some((s) => s.name === 'ralph-implement' && s.status === 'active'));
-    assert.ok(contract.skills.some((s) => s.name === 'raf-ppt' && s.status === 'deprecated'));
+    assert.ok(contract.skills.some((s) => s.name === 'gsi-ppt' && s.status === 'deprecated'));
     assert.ok(contract.skills.some((s) => s.name === 'agents-refresh' && s.status === 'active'));
     assert.ok(contract.agents.some((a) => a.name === 'prometheus-strict-metis' && a.status === 'active'));
     assert.ok(contract.agents.some((a) => a.name === 'prometheus-strict-momus' && a.status === 'active'));
     assert.ok(contract.agents.some((a) => a.name === 'prometheus-strict-oracle' && a.status === 'active'));
-    assert.ok(!contract.agents.some((a) => a.name === 'raf-goal-setter'));
+    assert.ok(!contract.agents.some((a) => a.name === 'gsi-goal-setter'));
     assert.ok(!contract.agents.some((a) => a.name === 'ppt-master-adapter'));
   });
 

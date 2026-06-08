@@ -1,6 +1,6 @@
 /**
  * Native agent config generators for Codex CLI.
- * Writes standalone TOML files under ~/.codex/agents/ or ./.codex/agents/.
+ * Writes standalone TOML files under ~/.codex/agents/ or ./.omx/agents/.
  */
 
 import { existsSync, readFileSync } from "fs";
@@ -358,7 +358,7 @@ export function generateAgentToml(
 }
 
 /**
- * Install prompt-backed native agent config .toml files to ~/.codex/agents/
+ * Install native agent config .toml files to ~/.codex/agents/ or ./.omx/agents/
  * Returns the number of agent files written.
  */
 export async function installNativeAgentConfigs(

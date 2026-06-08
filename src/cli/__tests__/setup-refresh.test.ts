@@ -15,10 +15,10 @@ import { tmpdir } from "node:os";
 import { setup } from "../setup.js";
 
 const EXPECTED_PROJECT_GITIGNORE = [
-  ".omx/",
+  ".omx/*",
+  "!.omx/agents/",
+  "!.omx/agents/**",
   ".codex/*",
-  "!.codex/agents/",
-  "!.codex/agents/**",
   "!.codex/skills/",
   "!.codex/skills/**",
   ".codex/skills/.system/**",
@@ -27,9 +27,10 @@ const EXPECTED_PROJECT_GITIGNORE = [
 ].join("\n") + "\n";
 
 const EXPECTED_PROJECT_GITIGNORE_WITHOUT_OMX = [
+  ".omx/*",
+  "!.omx/agents/",
+  "!.omx/agents/**",
   ".codex/*",
-  "!.codex/agents/",
-  "!.codex/agents/**",
   "!.codex/skills/",
   "!.codex/skills/**",
   ".codex/skills/.system/**",
@@ -185,8 +186,8 @@ describe("omx setup refresh summary and dry-run behavior", () => {
       assert.equal(existsSync(join(wd, ".codex", "skills", "team", "SKILL.md")), false);
       assert.equal(existsSync(join(wd, ".codex", "skills", "worker", "SKILL.md")), false);
       assert.equal(existsSync(join(wd, ".codex", "prompts", "team-executor.md")), false);
-      assert.equal(existsSync(join(wd, ".codex", "agents", "team-executor.toml")), false);
-      assert.equal(existsSync(join(wd, ".codex", "agents", "executor.toml")), true);
+      assert.equal(existsSync(join(wd, ".omx", "agents", "team-executor.toml")), false);
+      assert.equal(existsSync(join(wd, ".omx", "agents", "executor.toml")), true);
 
       const persisted = JSON.parse(
         await readFile(join(wd, ".omx", "setup-scope.json"), "utf-8"),
@@ -214,7 +215,7 @@ describe("omx setup refresh summary and dry-run behavior", () => {
         teamMode: "enabled",
       });
       assert.equal(existsSync(join(wd, ".codex", "prompts", "team-executor.md")), true);
-      assert.equal(existsSync(join(wd, ".codex", "agents", "team-executor.toml")), true);
+      assert.equal(existsSync(join(wd, ".omx", "agents", "team-executor.toml")), true);
       assert.match(await readFile(join(wd, "AGENTS.md"), "utf-8"), /\$team/);
 
       await runSetupInTempDir(wd, {
@@ -224,7 +225,7 @@ describe("omx setup refresh summary and dry-run behavior", () => {
       });
 
       assert.equal(existsSync(join(wd, ".codex", "prompts", "team-executor.md")), false);
-      assert.equal(existsSync(join(wd, ".codex", "agents", "team-executor.toml")), false);
+      assert.equal(existsSync(join(wd, ".omx", "agents", "team-executor.toml")), false);
       const agents = await readFile(join(wd, "AGENTS.md"), "utf-8");
       assert.doesNotMatch(agents, /\$team/);
       assert.doesNotMatch(agents, /<team_(?:compositions|pipeline|model_resolution)>/);
@@ -245,7 +246,7 @@ describe("omx setup refresh summary and dry-run behavior", () => {
 
       const gitignore = await readFile(join(wd, ".gitignore"), "utf-8");
       assert.equal(gitignore, `node_modules/\n${EXPECTED_PROJECT_GITIGNORE}`);
-      assert.equal(gitignore.match(/^\.omx\/$/gm)?.length ?? 0, 1);
+      assert.equal(gitignore.match(/^\.omx\/\*$/gm)?.length ?? 0, 1);
       assert.equal(gitignore.match(/^\.codex\/\*$/gm)?.length ?? 0, 1);
     } finally {
       await rm(wd, { recursive: true, force: true });
@@ -319,7 +320,8 @@ describe("omx setup refresh summary and dry-run behavior", () => {
 
       await runSetupInTempDir(wd, { scope: "project" });
       await mkdir(join(wd, ".codex", "skills", ".system"), { recursive: true });
-      await writeFile(join(wd, ".codex", "agents", "local.toml"), "# local\n");
+      await mkdir(join(wd, ".omx", "agents"), { recursive: true });
+      await writeFile(join(wd, ".omx", "agents", "local.toml"), "# local\n");
       await writeFile(join(wd, ".codex", "prompts", "local.md"), "# local\n");
       await writeFile(
         join(wd, ".codex", "skills", ".system", "cache.json"),
@@ -333,7 +335,7 @@ describe("omx setup refresh summary and dry-run behavior", () => {
           "--short",
           "--ignored",
           ".codex/config.toml",
-          ".codex/agents/local.toml",
+          ".omx/agents/local.toml",
           ".codex/prompts/local.md",
           ".codex/skills/omx-setup/SKILL.md",
           ".codex/skills/.system/cache.json",
@@ -342,7 +344,7 @@ describe("omx setup refresh summary and dry-run behavior", () => {
       );
       assert.equal(status.status, 0);
       assert.match(status.stdout, /^!! \.codex\/config\.toml$/m);
-      assert.match(status.stdout, /^\?\? \.codex\/agents\/local\.toml$/m);
+      assert.match(status.stdout, /^\?\? \.omx\/agents\/local\.toml$/m);
       assert.match(status.stdout, /^\?\? \.codex\/prompts\/local\.md$/m);
       assert.match(status.stdout, /^\?\? \.codex\/skills\/omx-setup\/SKILL\.md$/m);
       assert.match(status.stdout, /^!! \.codex\/skills\/\.system\/cache\.json$/m);

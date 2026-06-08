@@ -9,18 +9,18 @@ function readSurface(path: string): string {
   return readFileSync(join(repoRoot, path), 'utf8');
 }
 
-describe('RAF stage skill contract', () => {
+describe('GSI stage skill contract', () => {
   it('keeps the generic three-stage flow tied to artifact routing and ppt-master implementation', () => {
-    const raf = readSurface('skills/raf/SKILL.md');
+    const gsi = readSurface('skills/gsi/SKILL.md');
     const goalSetting = readSurface('skills/goal-setting/SKILL.md');
     const architectureSpec = readSurface('skills/architecture-spec/SKILL.md');
     const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
 
-    assert.match(raf, /\$goal-setting/i);
-    assert.match(raf, /\$architecture-spec/i);
-    assert.match(raf, /\$ralph-implement/i);
-    assert.match(raf, /Backprop/i);
-    assert.match(raf, /Artifact type is detected inside the stages/i);
+    assert.match(gsi, /\$goal-setting/i);
+    assert.match(gsi, /\$architecture-spec/i);
+    assert.match(gsi, /\$ralph-implement/i);
+    assert.match(gsi, /Backprop/i);
+    assert.match(gsi, /Artifact type is detected inside the stages/i);
 
     assert.match(goalSetting, /artifact-agnostic/i);
     assert.match(goalSetting, /PPT Detection/i);
@@ -34,15 +34,15 @@ describe('RAF stage skill contract', () => {
   });
 
   it('requires formal stage artifacts to be detailed Markdown outlines', () => {
-    const raf = readSurface('skills/raf/SKILL.md');
+    const gsi = readSurface('skills/gsi/SKILL.md');
     const goalSetting = readSurface('skills/goal-setting/SKILL.md');
     const architectureSpec = readSurface('skills/architecture-spec/SKILL.md');
     const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
 
-    assert.match(raf, /Markdown outline document/i);
-    assert.match(raf, /Use `-` bullets/i);
-    assert.match(raf, /Make each layer semantically narrower than its parent/i);
-    assert.match(raf, /Do not make the outline artificially short/i);
+    assert.match(gsi, /Markdown outline document/i);
+    assert.match(gsi, /Use `-` bullets/i);
+    assert.match(gsi, /Make each layer semantically narrower than its parent/i);
+    assert.match(gsi, /Do not make the outline artificially short/i);
 
     for (const surface of [goalSetting, architectureSpec, ralphImplement]) {
       assert.match(surface, /Markdown outline document/i);
@@ -53,11 +53,11 @@ describe('RAF stage skill contract', () => {
   });
 
   it('reuses deep-interview mechanics for the goal-setting stage', () => {
-    const raf = readSurface('skills/raf/SKILL.md');
+    const gsi = readSurface('skills/gsi/SKILL.md');
     const goalSetting = readSurface('skills/goal-setting/SKILL.md');
 
-    assert.match(raf, /interview-backed/i);
-    assert.match(raf, /\$deep-interview/);
+    assert.match(gsi, /interview-backed/i);
+    assert.match(gsi, /\$deep-interview/);
     assert.match(goalSetting, /Deep-Interview Reuse Contract/i);
     assert.match(goalSetting, /one-question-per-round rule/i);
     assert.match(goalSetting, /ambiguity scoring/i);
@@ -67,13 +67,13 @@ describe('RAF stage skill contract', () => {
     assert.match(goalSetting, /pressure pass/i);
   });
 
-  it('documents OMC support-agent attachment across RAF stages', () => {
-    const raf = readSurface('skills/raf/SKILL.md');
+  it('documents OMC support-agent attachment across GSI stages', () => {
+    const gsi = readSurface('skills/gsi/SKILL.md');
     const goalSetting = readSurface('skills/goal-setting/SKILL.md');
     const architectureSpec = readSurface('skills/architecture-spec/SKILL.md');
     const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
 
-    assert.match(raf, /OMC Agent Attachment Map/i);
+    assert.match(gsi, /OMC Agent Attachment Map/i);
     for (const name of ['analyst', 'explore', 'researcher', 'critic', 'scholastic']) {
       assert.match(goalSetting, new RegExp(name));
     }
@@ -103,8 +103,8 @@ describe('RAF stage skill contract', () => {
     }
   });
 
-  it('defines continuous implementation backlog and Codex supervision for RAF implementation', () => {
-    const raf = readSurface('skills/raf/SKILL.md');
+  it('defines continuous implementation backlog and Codex supervision for GSI implementation', () => {
+    const gsi = readSurface('skills/gsi/SKILL.md');
     const architectureSpec = readSurface('skills/architecture-spec/SKILL.md');
     const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
 
@@ -118,66 +118,66 @@ describe('RAF stage skill contract', () => {
     assert.match(ralphImplement, /backprop/);
     assert.match(ralphImplement, /Continue to the next backlog item/i);
     assert.match(ralphImplement, /Codex is the main supervisor/i);
-    assert.match(raf, /Codex remains the main supervisor/i);
+    assert.match(gsi, /Codex remains the main supervisor/i);
   });
 
-  it('adapts the Team-style five-phase runtime model inside RAF implementation', () => {
-    const raf = readSurface('skills/raf/SKILL.md');
+  it('adapts the Team-style five-phase runtime model inside GSI implementation', () => {
+    const gsi = readSurface('skills/gsi/SKILL.md');
     const architectureSpec = readSurface('skills/architecture-spec/SKILL.md');
     const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
 
-    assert.match(raf, /Two-Layer Model/i);
-    assert.match(raf, /Team-Mode Pattern To Reuse/i);
-    assert.match(raf, /Runtime Phase Mapping/i);
-    assert.match(raf, /RAF Runtime State Contract/i);
-    for (const phase of ['raf-goal', 'raf-spec', 'raf-dispatch', 'raf-verify', 'raf-backprop']) {
-      assert.match(raf, new RegExp(phase));
+    assert.match(gsi, /Two-Layer Model/i);
+    assert.match(gsi, /Team-Mode Pattern To Reuse/i);
+    assert.match(gsi, /Runtime Phase Mapping/i);
+    assert.match(gsi, /GSI Runtime State Contract/i);
+    for (const phase of ['gsi-goal', 'gsi-spec', 'gsi-dispatch', 'gsi-verify', 'gsi-backprop']) {
+      assert.match(gsi, new RegExp(phase));
     }
     for (const field of ['goal_contract', 'architecture_spec', 'backlog', 'dispatches', 'verification', 'backprop_ledger', 'transition_log']) {
-      assert.match(raf, new RegExp(field));
+      assert.match(gsi, new RegExp(field));
     }
 
-    assert.match(architectureSpec, /Map the spec into RAF runtime phases/i);
+    assert.match(architectureSpec, /Map the spec into GSI runtime phases/i);
     assert.match(ralphImplement, /Team-Like Runtime Phases/i);
     assert.match(ralphImplement, /Require ACK\/readback/i);
     assert.match(ralphImplement, /Runtime phase trace/i);
     assert.match(ralphImplement, /not a requirement to launch tmux Team/i);
   });
 
-  it('documents full-flow RAF auto mode and manual stage controls', () => {
-    const raf = readSurface('skills/raf/SKILL.md');
+  it('documents full-flow GSI auto mode and manual stage controls', () => {
+    const gsi = readSurface('skills/gsi/SKILL.md');
 
-    assert.match(raf, /Manual And Automatic Operation/i);
-    assert.match(raf, /Manual stage operation/i);
-    assert.match(raf, /Automatic full-flow operation/i);
-    assert.match(raf, /\$raf --team=auto/);
-    assert.match(raf, /\$raf --team=manual/);
-    assert.match(raf, /\$raf --team=off/);
-    assert.match(raf, /Autopilot-Style Hook Mode/i);
-    assert.match(raf, /mode: "raf"/);
-    assert.match(raf, /child stages are supervised phases/i);
-    assert.match(raf, /auto_mode/);
-    assert.match(raf, /team_policy/);
-    assert.match(raf, /handoff_artifacts/);
-    assert.match(raf, /return_to_phase_reason/);
+    assert.match(gsi, /Manual And Automatic Operation/i);
+    assert.match(gsi, /Manual stage operation/i);
+    assert.match(gsi, /Automatic full-flow operation/i);
+    assert.match(gsi, /\$gsi --team=auto/);
+    assert.match(gsi, /\$gsi --team=manual/);
+    assert.match(gsi, /\$gsi --team=off/);
+    assert.match(gsi, /Autopilot-Style Hook Mode/i);
+    assert.match(gsi, /mode: "gsi"/);
+    assert.match(gsi, /child stages are supervised phases/i);
+    assert.match(gsi, /auto_mode/);
+    assert.match(gsi, /team_policy/);
+    assert.match(gsi, /handoff_artifacts/);
+    assert.match(gsi, /return_to_phase_reason/);
   });
 
-  it('documents Team auto/manual/off policy under RAF supervision', () => {
-    const raf = readSurface('skills/raf/SKILL.md');
+  it('documents Team auto/manual/off policy under GSI supervision', () => {
+    const gsi = readSurface('skills/gsi/SKILL.md');
     const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
 
-    assert.match(raf, /Team Invocation Policy/i);
-    assert.match(raf, /team_policy: "auto"/);
-    assert.match(raf, /team_policy: "manual"/);
-    assert.match(raf, /team_policy: "off"/);
-    assert.match(raf, /Team workers do not own RAF goal\/spec\/backlog state/i);
+    assert.match(gsi, /Team Invocation Policy/i);
+    assert.match(gsi, /team_policy: "auto"/);
+    assert.match(gsi, /team_policy: "manual"/);
+    assert.match(gsi, /team_policy: "off"/);
+    assert.match(gsi, /Team workers do not own GSI goal\/spec\/backlog state/i);
 
     assert.match(ralphImplement, /Team Use Inside Implementation/i);
     assert.match(ralphImplement, /Auto Team launch/i);
     assert.match(ralphImplement, /Manual Team launch/i);
     assert.match(ralphImplement, /Team off/i);
     assert.match(ralphImplement, /Team supervision/i);
-    assert.match(ralphImplement, /Codex supervisor owns RAF backlog/i);
+    assert.match(ralphImplement, /Codex supervisor owns GSI backlog/i);
   });
 
   it('documents child-agent configuration and task-type governance for implementation', () => {
@@ -200,7 +200,7 @@ describe('RAF stage skill contract', () => {
   it('keeps ppt-master Eight Confirmations in architecture/spec rather than implementation prompts', () => {
     const architectureSpec = readSurface('skills/architecture-spec/SKILL.md');
     const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
-    const rafPpt = readSurface('skills/raf-ppt/SKILL.md');
+    const gsiPpt = readSurface('skills/gsi-ppt/SKILL.md');
 
     for (const decision of [
       'Canvas format',
@@ -224,8 +224,8 @@ describe('RAF stage skill contract', () => {
     assert.match(ralphImplement, /Do not stop in Stage 3 to ask the user for Eight Confirmations/i);
     assert.match(ralphImplement, /route back to `\$architecture-spec`/i);
 
-    assert.match(rafPpt, /Eight Confirmations belong to `\$architecture-spec`/i);
-    assert.match(rafPpt, /consume them instead of re-asking during implementation/i);
+    assert.match(gsiPpt, /Eight Confirmations belong to `\$architecture-spec`/i);
+    assert.match(gsiPpt, /consume them instead of re-asking during implementation/i);
   });
 
   it('ships a helper for resolving or cloning the external ppt-master dependency', () => {
@@ -240,19 +240,19 @@ describe('RAF stage skill contract', () => {
     assert.match(helper, /exit 2/);
   });
 
-  it('documents common RAF agents and presentation-route adapter agents', () => {
-    const raf = readSurface('skills/raf/SKILL.md');
+  it('documents common GSI agents and presentation-route adapter agents', () => {
+    const gsi = readSurface('skills/gsi/SKILL.md');
     const goalSetting = readSurface('skills/goal-setting/SKILL.md');
     const architectureSpec = readSurface('skills/architecture-spec/SKILL.md');
     const ralphImplement = readSurface('skills/ralph-implement/SKILL.md');
-    const combined = `${raf}\n${goalSetting}\n${architectureSpec}\n${ralphImplement}`;
+    const combined = `${gsi}\n${goalSetting}\n${architectureSpec}\n${ralphImplement}`;
 
     for (const name of [
-      'raf-goal-setter',
-      'raf-perspective-splitter',
-      'raf-variant-designer',
-      'raf-rough-loop-runner',
-      'raf-backprop-critic',
+      'gsi-goal-setter',
+      'gsi-perspective-splitter',
+      'gsi-variant-designer',
+      'gsi-rough-loop-runner',
+      'gsi-backprop-critic',
     ]) {
       assert.match(combined, new RegExp(name));
     }

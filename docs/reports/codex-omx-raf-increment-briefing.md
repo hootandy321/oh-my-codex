@@ -5,18 +5,18 @@
 - 汇报对象：上级，默认熟悉 Codex/OMX 的基本用途，但不需要逐文件理解实现。
 - 汇报目标：说明本轮改动不是简单新增几个 prompt 或 skill，而是把 OMX 从固定工作流集合推进到可动态扩展、目标驱动、带反馈闭环的任务操作系统。
 - 汇报重点：
-  - RAF 三层 V 架构的增量价值。
-  - RAF 和原 OMX 工作方式的区别。
+  - GSI 三层 V 架构的增量价值。
+  - GSI 和原 OMX 工作方式的区别。
   - 动态运行时加载 agent/skill 的价值。
   - 用必要实现证据支撑论点，但不做代码 diff 走读。
 - 非目标：
   - 不讲 npm、代理、构建环境问题。
   - 不把重点放在每个文件具体改了什么。
-  - 不把 RAF 讲成单一 PPT 工具。
+  - 不把 GSI 讲成单一 PPT 工具。
   - 不宣称 JS/TS 代码插件 agent 已完全动态化。
 - 建议页数：9 页。
 - 建议时长：8 到 12 分钟。
-- Canonical source scope：以 `/Users/lxy/lxygit/oh-my-codex` 当前本地工作树为准；`80589be3 Enable project-loaded RAF presentation agents` 是已提交的动态 project agent 和 RAF/PPT 基线，当前工作树进一步把 RAF-PPT 收敛为通用 RAF 三阶段入口。
+- Canonical source scope：以 `/Users/lxy/lxygit/oh-my-codex` 当前本地工作树为准；`80589be3 Enable project-loaded GSI presentation agents` 是已提交的动态 project agent 和 GSI/PPT 基线，当前工作树进一步把 GSI-PPT 收敛为通用 GSI 三阶段入口。
 
 ## Deck Narrative
 
@@ -28,9 +28,9 @@
 
 1. 上级真正关心的是：这轮投入是否带来可复用能力，而不是一次性 demo。
 2. 原 OMX 的强项是执行编排，但复杂目标仍缺“目标冻结、规格反推、失败归因”的治理结构。
-3. RAF 三层 V 架构补上这层治理：目标契约、架构规格、实现闭环。
+3. GSI 三层 V 架构补上这层治理：目标契约、架构规格、实现闭环。
 4. 动态 agent/skill 加载降低能力扩展成本，让新专家可以先项目化试验，再沉淀为通用能力。
-5. PPT 路径是首个验证场景，用真实可交付物证明 RAF 不是抽象方法论。
+5. PPT 路径是首个验证场景，用真实可交付物证明 GSI 不是抽象方法论。
 6. 实现证据只用于支撑结论，不抢占汇报主线。
 
 ## Audience Decision Narrative
@@ -40,7 +40,7 @@
 | 上级可能关心的问题 | 本轮汇报要回答的结论 |
 | --- | --- |
 | 这是不是又加了一组 prompt？ | 不是。增量是把复杂任务执行前后的控制点制度化。 |
-| 和原 OMX 有什么本质区别？ | 原 OMX 更偏运行时编排；RAF 增加目标契约、规格反推和失败回溯。 |
+| 和原 OMX 有什么本质区别？ | 原 OMX 更偏运行时编排；GSI 增加目标契约、规格反推和失败回溯。 |
 | 为什么值得继续投入？ | 这套结构可以复用到 PPT、代码、报告、研究等多类产物，而不是一次性功能。 |
 | 动态加载有什么管理价值？ | 新专家可以项目级配置、刷新、验证，再决定是否产品化，降低试错成本。 |
 | 当前做到什么程度？ | 已有 skill、project agent、registry、CLI refresh、测试和插件目录支撑；还需用真实 PPTX 闭环验证。 |
@@ -48,10 +48,10 @@
 ### 论点链
 
 1. **管理问题**：复杂任务失败的原因常常不是“执行不努力”，而是目标、视角、验收标准没有被提前固定。
-2. **方法增量**：RAF 用三层 V 架构把目标、规格、执行证据连起来，让失败能回溯到正确层级。
+2. **方法增量**：GSI 用三层 V 架构把目标、规格、执行证据连起来，让失败能回溯到正确层级。
 3. **工程增量**：动态加载 agent/skill 让专家能力从“改代码发布”变成“项目级配置、刷新、验证”。
 4. **验证路径**：PPT 任务同时需要目标、受众、叙事、视觉、证据和可编辑产物，适合作为第一条闭环验证路径。
-5. **决策请求**：确认以 RAF 作为下一阶段复杂任务组织模型，并用本次汇报 PPT 跑通端到端验证。
+5. **决策请求**：确认以 GSI 作为下一阶段复杂任务组织模型，并用本次汇报 PPT 跑通端到端验证。
 
 ## Slide 1: 给上级的一句话结论
 
@@ -89,7 +89,7 @@
   - 缺少甲方/受众/实现/评审等多视角反推。
   - 失败只被局部修补，没有回到目标或规格层。
 - 对上级而言，这会带来返工、不可复用、难评估的问题。
-- RAF 的价值是把这些风险前置成流程控制点。
+- GSI 的价值是把这些风险前置成流程控制点。
 
 ### Evidence
 
@@ -99,17 +99,17 @@
 
 ### Speaker Notes
 
-这里要从管理风险讲，不从代码讲。上级真正关心的是：我们能不能降低 AI 产物返工，能不能让复杂任务变得可审阅、可复用。RAF 解决的是这个问题。
+这里要从管理风险讲，不从代码讲。上级真正关心的是：我们能不能降低 AI 产物返工，能不能让复杂任务变得可审阅、可复用。GSI 解决的是这个问题。
 
-## Slide 3: 原 OMX 与 RAF 的定位差异
+## Slide 3: 原 OMX 与 GSI 的定位差异
 
 ### Visible Message
 
-原 OMX 是强执行底座；RAF 是加在执行底座上的任务治理层。
+原 OMX 是强执行底座；GSI 是加在执行底座上的任务治理层。
 
 ### Comparison Table
 
-| 维度 | 原 OMX | RAF 增量 |
+| 维度 | 原 OMX | GSI 增量 |
 | --- | --- | --- |
 | 主要价值 | 调度 skill、agent、runtime 模式 | 约束复杂任务的目标、规格和验收 |
 | 用户入口 | 选择或触发某个工作流 | 先形成目标契约，再进入规格和执行 |
@@ -120,18 +120,18 @@
 ### Evidence
 
 - `README.md` 将 OMX 定位为 task routing、workflow、runtime。
-- `skills/raf/SKILL.md` 将 RAF 定义为 `$goal-setting -> $architecture-spec -> $ralph-implement`。
-- `src/hooks/__tests__/raf-ppt-skill-contract.test.ts` 保护 RAF stage contract。
+- `skills/gsi/SKILL.md` 将 GSI 定义为 `$goal-setting -> $architecture-spec -> $ralph-implement`。
+- `src/hooks/__tests__/gsi-ppt-skill-contract.test.ts` 保护 GSI stage contract。
 
 ### Speaker Notes
 
-不要把原 OMX 和 RAF 对立起来。更准确的说法是：原 OMX 是执行底座，RAF 是治理层。上级要看到的是两者叠加后的能力增量。
+不要把原 OMX 和 GSI 对立起来。更准确的说法是：原 OMX 是执行底座，GSI 是治理层。上级要看到的是两者叠加后的能力增量。
 
-## Slide 4: RAF 三层 V 架构
+## Slide 4: GSI 三层 V 架构
 
 ### Visible Message
 
-RAF 把复杂任务拆成三个可审阅阶段：目标契约、架构规格、实现闭环。
+GSI 把复杂任务拆成三个可审阅阶段：目标契约、架构规格、实现闭环。
 
 ### Key Points
 
@@ -172,8 +172,8 @@ RAF 把复杂任务拆成三个可审阅阶段：目标契约、架构规格、�
 
 - `src/agents/registry.ts`
 - `src/cli/agents.ts`
-- `.codex/prompts/raf-goal-setter.md`
-- `.codex/agents/raf-goal-setter.toml`
+- `.codex/prompts/gsi-goal-setter.md`
+- `.codex/agents/gsi-goal-setter.toml`
 - `skills/agents-refresh/SKILL.md`
 
 ### Speaker Notes
@@ -184,7 +184,7 @@ RAF 把复杂任务拆成三个可审阅阶段：目标契约、架构规格、�
 
 ### Visible Message
 
-PPT 不是边界，而是检验 RAF 是否能交付真实产物的高压场景。
+PPT 不是边界，而是检验 GSI 是否能交付真实产物的高压场景。
 
 ### Key Points
 
@@ -195,19 +195,19 @@ PPT 不是边界，而是检验 RAF 是否能交付真实产物的高压场景�
   - 视觉可读。
   - 讲稿可用。
   - 最终产物可编辑。
-- 当前 `$raf-ppt` 已收敛为兼容入口。
-- 真正执行由通用 RAF 阶段识别 PPT artifact，再路由到 `ppt-master`。
+- 当前 `$gsi-ppt` 已收敛为兼容入口。
+- 真正执行由通用 GSI 阶段识别 PPT artifact，再路由到 `ppt-master`。
 
 ### Evidence
 
-- `skills/raf-ppt/SKILL.md`
+- `skills/gsi-ppt/SKILL.md`
 - `skills/architecture-spec/SKILL.md`
 - `skills/ralph-implement/SKILL.md`
 - `skills/ralph-implement/scripts/ensure-ppt-master-skill.sh`
 
 ### Speaker Notes
 
-这页防止误解：我们不是把 RAF 限定为 PPT 工具，而是用 PPT 作为第一条验证路径。PPT 对目标、结构和产物质量要求都高，适合证明这套方法不是空转。
+这页防止误解：我们不是把 GSI 限定为 PPT 工具，而是用 PPT 作为第一条验证路径。PPT 对目标、结构和产物质量要求都高，适合证明这套方法不是空转。
 
 ## Slide 7: 当前实现证据足够支撑哪些判断
 
@@ -219,11 +219,11 @@ PPT 不是边界，而是检验 RAF 是否能交付真实产物的高压场景�
 
 | 管理判断 | 实现证据 |
 | --- | --- |
-| RAF 已不是口头概念 | `skills/goal-setting/SKILL.md`、`skills/architecture-spec/SKILL.md`、`skills/ralph-implement/SKILL.md` |
-| PPT 是路由适配 | `skills/raf-ppt/SKILL.md`、`skills/architecture-spec/SKILL.md` |
+| GSI 已不是口头概念 | `skills/goal-setting/SKILL.md`、`skills/architecture-spec/SKILL.md`、`skills/ralph-implement/SKILL.md` |
+| PPT 是路由适配 | `skills/gsi-ppt/SKILL.md`、`skills/architecture-spec/SKILL.md` |
 | agent 可动态加载 | `src/agents/registry.ts` |
 | agent 可刷新为 native TOML | `src/cli/agents.ts`、`.codex/agents/*.toml` |
-| 关键契约有测试保护 | `src/agents/__tests__/registry.test.ts`、`src/hooks/__tests__/raf-ppt-skill-contract.test.ts` |
+| 关键契约有测试保护 | `src/agents/__tests__/registry.test.ts`、`src/hooks/__tests__/gsi-ppt-skill-contract.test.ts` |
 | 插件侧可分发 | `plugins/oh-my-codex/skills/*`、`src/catalog/manifest.json`、`templates/catalog-manifest.json` |
 
 ### Speaker Notes
@@ -241,7 +241,7 @@ PPT 不是边界，而是检验 RAF 是否能交付真实产物的高压场景�
 | 风险 | 当前处理 | 下一步 |
 | --- | --- |
 | 被误解为任意代码插件 | 明确当前是 Markdown/TOML agent 配置加载 | 单独评估 JS/TS 插件安全模型 |
-| RAF 被误解为 PPT 工具 | `$raf-ppt` 已变成兼容入口 | 继续沉淀代码、报告、研究 artifact 路由 |
+| GSI 被误解为 PPT 工具 | `$gsi-ppt` 已变成兼容入口 | 继续沉淀代码、报告、研究 artifact 路由 |
 | 新专家质量不稳定 | project scope 先试验 | 建立提升为内置 agent 的标准 |
 | 只停留在文档层 | 本次汇报用 PPTX 闭环验证 | 生成 `ppt-master` 项目和 editable PPTX |
 
@@ -253,18 +253,18 @@ PPT 不是边界，而是检验 RAF 是否能交付真实产物的高压场景�
 
 ### Visible Message
 
-建议把 RAF 作为下一阶段复杂任务组织模型，并用本次 PPT 任务完成端到端验证。
+建议把 GSI 作为下一阶段复杂任务组织模型，并用本次 PPT 任务完成端到端验证。
 
 ### Decision Points
 
 - 认可方向：
-  - RAF 作为复杂任务治理层。
+  - GSI 作为复杂任务治理层。
   - 动态 agent/skill 作为专家能力试验机制。
   - PPT 作为第一条端到端验证路径。
 - 本轮后续交付：
   - 用这份 Markdown 进入 `ppt-master`。
   - 生成 `design_spec.md`、`spec_lock.md`、SVG 页面和 editable PPTX。
-  - 用实际汇报 PPT 检验 RAF-PPT 闭环。
+  - 用实际汇报 PPT 检验 GSI-PPT 闭环。
 
 ### Next Steps
 
@@ -278,7 +278,7 @@ PPT 不是边界，而是检验 RAF 是否能交付真实产物的高压场景�
 
 ## Architecture-Spec Design Decisions For PPT-Master
 
-这些是 RAF Stage 2 为 `ppt-master` 提前固化的设计决策。它们对应原生 `ppt-master` 的 Eight Confirmations，但在 OMX/RAF 集成流程里属于 `$architecture-spec`，不应在 `$ralph-implement` 阶段临时追问。
+这些是 GSI Stage 2 为 `ppt-master` 提前固化的设计决策。它们对应原生 `ppt-master` 的 Eight Confirmations，但在 OMX/GSI 集成流程里属于 `$architecture-spec`，不应在 `$ralph-implement` 阶段临时追问。
 
 1. Canvas format：`ppt169`。
 2. Page count range：9 页。
@@ -293,7 +293,7 @@ PPT 不是边界，而是检验 RAF 是否能交付真实产物的高压场景�
 
 | Risk | Classification | Owner | Handling |
 | --- | --- | --- | --- |
-| 听众误解为只做了 PPT 工具 | DeckNarrativeMismatch | Phase 2 narrative | 在 Slide 5 明确 PPT 是第一条验证路径，不是 RAF 边界 |
+| 听众误解为只做了 PPT 工具 | DeckNarrativeMismatch | Phase 2 narrative | 在 Slide 5 明确 PPT 是第一条验证路径，不是 GSI 边界 |
 | 代码证据过多导致主线变成开发日志 | VisualReadabilityFailure | Phase 2 page plan | 只保留 evidence matrix，不做逐文件 diff |
 | 动态加载被理解成任意代码插件 | DeckNarrativeMismatch | Phase 1 goal contract | 在 Slide 6 明确当前是 Markdown/TOML agent 配置加载 |
 | 当前工作树和已提交 commit 存在差异 | PptMasterInputError | Phase 1 source contract | 在 Source Contract 标明以当前本地工作树为准，并说明 80589be3 是基线 |

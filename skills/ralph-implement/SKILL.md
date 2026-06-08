@@ -1,11 +1,11 @@
 ---
 name: ralph-implement
-description: RAF Stage 3 persistent Ralph-style implementation against an approved goal and architecture spec
+description: GSI Stage 3 persistent Ralph-style implementation against an approved goal and architecture spec
 ---
 
 # Ralph Implement
 
-`$ralph-implement` is RAF Stage 3. It consumes the goal contract and architecture/spec artifacts, then runs persistent implementation until the artifact satisfies the rubric, verification evidence is collected, and the implementation backlog is exhausted or intentionally stopped.
+`$ralph-implement` is GSI Stage 3. It consumes the goal contract and architecture/spec artifacts, then runs persistent implementation until the artifact satisfies the rubric, verification evidence is collected, and the implementation backlog is exhausted or intentionally stopped.
 
 This skill is artifact-agnostic. It does not choose a public PPT/code/document branch. It reads the spec's artifact type and routes implementation accordingly.
 
@@ -29,13 +29,13 @@ If the spec is missing, route back to `$architecture-spec`. If the goal is missi
 ## Implementation Loop
 
 1. Load the goal contract and architecture/spec.
-2. Enter `raf-dispatch`: confirm artifact type, selected agent route, implementation backlog, and supervision plan.
+2. Enter `gsi-dispatch`: confirm artifact type, selected agent route, implementation backlog, and supervision plan.
 3. Select the next backlog item using the priority, dependency, risk, and value criteria from the spec.
 4. Dispatch that item through the appropriate child agents or direct implementation lane.
 5. Collect child-agent ACK/evidence or direct implementation evidence.
-6. Enter `raf-verify`: run the falsifier and acceptance checks for the current item.
-7. Classify failures with `raf-backprop-critic`.
-8. Enter `raf-backprop` when evidence fails, scope changes, or a challenger/backlog decision is needed.
+6. Enter `gsi-verify`: run the falsifier and acceptance checks for the current item.
+7. Classify failures with `gsi-backprop-critic`.
+8. Enter `gsi-backprop` when evidence fails, scope changes, or a challenger/backlog decision is needed.
 9. Fix implementation failures locally when they are inside the approved spec.
 10. Backprop goal/spec failures to the owning earlier stage.
 11. If the item passes, mark it complete, update the backlog, and select the next implementable item.
@@ -45,18 +45,18 @@ If the spec is missing, route back to `$architecture-spec`. If the goal is missi
 
 `$ralph-implement` borrows OMX Team's staged lifecycle while keeping Codex as the single supervisor.
 
-- `raf-dispatch`
+- `gsi-dispatch`
   - Select the next implementable backlog item.
   - Decide direct work versus child-agent dispatch.
   - Write a bounded assignment: item id, scope, files/artifacts, expected evidence, non-goals, and escalation triggers.
   - Require ACK/readback when a child agent or team lane is used.
-- `raf-verify`
+- `gsi-verify`
   - Verify the active backlog item before accepting it.
   - Use tests, builds, lint, artifact checks, reviewer agents, visual checks, or domain evidence as appropriate.
   - Treat implementer claims as untrusted until evidence is inspected by Codex supervisor or independent verifier/reviewer agents.
-- `raf-backprop`
+- `gsi-backprop`
   - Classify failure as implementation bug, weak backlog item, spec mismatch, goal mismatch, missing authority, or environmental blocker.
-  - Route implementation bugs back to `raf-dispatch`.
+  - Route implementation bugs back to `gsi-dispatch`.
   - Route weak item/spec issues back to `$architecture-spec`.
   - Route wrong-goal or authority issues back to `$goal-setting` or the user.
   - Route passed items to backlog continuation or terminal completion.
@@ -65,7 +65,7 @@ This is a control model, not a requirement to launch tmux Team. Use native subag
 
 ## Team Use Inside Implementation
 
-`$ralph-implement` may use `$team` as an execution engine when the approved spec and RAF state permit it.
+`$ralph-implement` may use `$team` as an execution engine when the approved spec and GSI state permit it.
 
 - Inputs from `$architecture-spec`
   - `team_policy`: `auto`, `manual`, or `off`
@@ -85,7 +85,7 @@ This is a control model, not a requirement to launch tmux Team. Use native subag
   - Do not invoke Team; use native subagents or direct supervisor execution.
 - Supervisor invariant
   - Team workers own only their assigned tasks.
-  - Codex supervisor owns RAF backlog, phase transitions, evidence acceptance, and backprop decisions.
+  - Codex supervisor owns GSI backlog, phase transitions, evidence acceptance, and backprop decisions.
 
 ## Continuous Implementation Backlog
 
@@ -182,10 +182,10 @@ Different implementation tasks need different supervision evidence.
 
 ## Agent Routing
 
-Common RAF agents:
+Common GSI agents:
 
-- `raf-rough-loop-runner`
-- `raf-backprop-critic`
+- `gsi-rough-loop-runner`
+- `gsi-backprop-critic`
 
 OMC implementation agents:
 
@@ -213,7 +213,7 @@ Agent-selection rule:
 
 ## PPT Implementation Rule
 
-For presentation tasks, final implementation MUST use the `ppt-master` skill dependency. Resolve it with the RAF helper before running any PPT implementation command:
+For presentation tasks, final implementation MUST use the `ppt-master` skill dependency. Resolve it with the GSI helper before running any PPT implementation command:
 
 ```bash
 PPT_MASTER_SKILL_DIR="$(./skills/ralph-implement/scripts/ensure-ppt-master-skill.sh)"
@@ -224,7 +224,7 @@ The helper checks `PPT_MASTER_SKILL_DIR`, `${CODEX_HOME:-~/.codex}/external/wxyt
 
 Read `$PPT_MASTER_SKILL_DIR/SKILL.md` before implementation. Use `uv run` for `ppt-master` scripts. Completion requires a real editable PPTX under `exports/*.pptx`; an outline or HTML mock is not enough.
 
-RAF/OMX stage boundary for `ppt-master` Eight Confirmations:
+GSI/OMX stage boundary for `ppt-master` Eight Confirmations:
 
 - `$architecture-spec` owns the eight design decisions: canvas format, page count range, target audience/use case, style objective, color scheme, icon library, typography plan, and image usage policy.
 - `$ralph-implement` consumes those decisions from the approved spec and writes `design_spec.md` / `spec_lock.md` accordingly.
@@ -247,7 +247,7 @@ Return an implementation record as a Markdown outline document. The body must us
     - List each item with status, owner, evidence, and next action.
     - Explain why the supervisor continued, stopped, deferred, or backpropagated after each item.
   - Runtime phase trace
-    - Record each `raf-dispatch`, `raf-verify`, and `raf-backprop` transition.
+    - Record each `gsi-dispatch`, `gsi-verify`, and `gsi-backprop` transition.
     - State the reason for every transition and the evidence that triggered it.
   - Child-agent supervision
     - Record child agent type, assigned item, reasoning effort, returned evidence, and supervisor verdict.

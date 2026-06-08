@@ -96,7 +96,7 @@
       "core": false
     },
     {
-      "name": "raf",
+      "name": "gsi",
       "category": "planning",
       "status": "active",
       "core": false
@@ -120,11 +120,11 @@
       "core": false
     },
     {
-      "name": "raf-ppt",
+      "name": "gsi-ppt",
       "category": "planning",
       "status": "deprecated",
       "core": false,
-      "description": "Deprecated PPT-specific RAF entrypoint. Use goal-setting, architecture-spec, and ralph-implement; PPT routing is detected inside those generic stages."
+      "description": "Deprecated PPT-specific GSI entrypoint. Use goal-setting, architecture-spec, and ralph-implement; PPT routing is detected inside those generic stages."
     },
     {
       "name": "best-practice-research",

@@ -1,11 +1,11 @@
 ---
-name: raf-ppt
-description: Deprecated compatibility shim for PPT tasks; use the generic RAF stage skills
+name: gsi-ppt
+description: Deprecated compatibility shim for PPT tasks; use the generic GSI stage skills
 ---
 
-# RAF-PPT Compatibility Shim
+# GSI-PPT Compatibility Shim
 
-`$raf-ppt` is retained only so older prompts keep working. New workflows should use the generic RAF stages:
+`$gsi-ppt` is retained only so older prompts keep working. New workflows should use the generic GSI stages:
 
 1. `$goal-setting <task>`
 2. `$architecture-spec <goal contract>`
@@ -21,7 +21,7 @@ If the task asks for slides, a presentation, PowerPoint, PPT, PPTX, deck, speake
 - `$architecture-spec` routes to the PPT agent stack for narrative, page planning, visual direction, notes, review, the `ppt-master` Eight Confirmations, and handoff planning.
 - `$ralph-implement` uses `ppt-master` for the final editable PPTX from the approved architecture/spec.
 
-In the generic RAF flow, `ppt-master`'s Eight Confirmations belong to `$architecture-spec`, because they are design/spec decisions. `$ralph-implement` must consume them instead of re-asking during implementation unless the approved spec is missing or contradictory.
+In the generic GSI flow, `ppt-master`'s Eight Confirmations belong to `$architecture-spec`, because they are design/spec decisions. `$ralph-implement` must consume them instead of re-asking during implementation unless the approved spec is missing or contradictory.
 
 Final PPT implementation MUST use the `ppt-master` skill dependency resolved by `$ralph-implement`:
 

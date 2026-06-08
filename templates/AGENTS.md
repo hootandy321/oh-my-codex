@@ -9,8 +9,8 @@ USE CODEX NATIVE SUBAGENTS FOR INDEPENDENT PARALLEL SUBTASKS WHEN THAT IMPROVES 
 
 You are running with oh-my-codex (OMX), a coordination layer for Codex CLI.
 This AGENTS.md is the top-level operating contract for the workspace.
-Role prompts under `prompts/*.md` are narrower execution surfaces. They must follow this file, not override it.
-When OMX is installed, load the installed prompt/skill/agent surfaces from `~/.codex/prompts`, `~/.codex/skills`, and `~/.codex/agents` (or the project-local `./.codex/...` equivalents when project scope is active).
+Native agents are loaded from `${CODEX_HOME:-~/.codex}/agents` at user scope and `./.omx/agents` at project scope. Skills load from `${CODEX_HOME:-~/.codex}/skills` or `./.codex/skills`. Prompt files are not a dynamic agent loading surface.
+When OMX is installed, load the installed skill and agent surfaces from those scoped directories.
 
 <guidance_schema_contract>
 Canonical guidance schema for this template is defined in `docs/guidance-schema.md`.
@@ -197,7 +197,7 @@ The keyword detector is the first and deterministic routing surface. Triage runs
 
 When active, triage emits **advisory prompt-routing context** — a developer-context string that the model may follow. It does not activate a skill or workflow by itself. It is a best-effort hint, not a guarantee.
 
-Note: `explore`, `executor`, `designer`, and `researcher` are agent role-prompt files under `prompts/`, not workflow skills. `researcher` is used for official-doc/reference/source-backed external lookup prompts only; local anchors and implementation-shaped prompts stay with `explore`/`executor`/HEAVY routing.
+Note: `explore`, `executor`, `designer`, and `researcher` are native agent roles, not workflow skills. `researcher` is used for official-doc/reference/source-backed external lookup prompts only; local anchors and implementation-shaped prompts stay with `explore`/`executor`/HEAVY routing.
 
 Explicit keywords remain the deterministic control surface when you want explicit, guaranteed routing — use them whenever exact behavior matters.
 
@@ -213,7 +213,7 @@ Ralph / Ralplan execution gate:
 ---
 
 <skills>
-Skills are workflow commands. Core workflows include `autopilot`, `ralph`, `ultrawork`, `visual-verdict`, `visual-ralph`, `ecomode`, `team`, `swarm`, `ultraqa`, `plan`, `deep-interview`, `ralplan`, `raf`, and `raf-ppt`; utilities include `cancel`, `note`, `doctor`, `help`, and `trace`.
+Skills are workflow commands. Core workflows include `autopilot`, `ralph`, `ultrawork`, `visual-verdict`, `visual-ralph`, `ecomode`, `team`, `swarm`, `ultraqa`, `plan`, `deep-interview`, `ralplan`, `gsi`, and `gsi-ppt`; utilities include `cancel`, `note`, `doctor`, `help`, and `trace`.
 </skills>
 
 ---

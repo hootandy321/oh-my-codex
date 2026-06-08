@@ -237,11 +237,11 @@ describe('keyword detector team compatibility', () => {
     assert.equal(match.keyword.toLowerCase(), '$best-practice-research');
   });
 
-  it('maps explicit RAF invocations to generic stage workflows and legacy compatibility shims', () => {
-    const raf = detectPrimaryKeyword('$raf turn this into a three-phase V-model task');
-    assert.ok(raf);
-    assert.equal(raf.skill, 'raf');
-    assert.equal(raf.keyword.toLowerCase(), '$raf');
+  it('maps explicit GSI invocations to generic stage workflows and legacy compatibility shims', () => {
+    const gsi = detectPrimaryKeyword('$gsi turn this into a three-phase V-model task');
+    assert.ok(gsi);
+    assert.equal(gsi.skill, 'gsi');
+    assert.equal(gsi.keyword.toLowerCase(), '$gsi');
 
     const goalSetting = detectPrimaryKeyword('$goal-setting freeze this task goal');
     assert.ok(goalSetting);
@@ -258,15 +258,15 @@ describe('keyword detector team compatibility', () => {
     assert.equal(ralphImplement.skill, 'ralph-implement');
     assert.equal(ralphImplement.keyword.toLowerCase(), '$ralph-implement');
 
-    const rafPpt = detectPrimaryKeyword('$raf-ppt build slides from source.md');
+    const rafPpt = detectPrimaryKeyword('$gsi-ppt build slides from source.md');
     assert.ok(rafPpt);
-    assert.equal(rafPpt.skill, 'raf-ppt');
-    assert.equal(rafPpt.keyword.toLowerCase(), '$raf-ppt');
+    assert.equal(rafPpt.skill, 'gsi-ppt');
+    assert.equal(rafPpt.keyword.toLowerCase(), '$gsi-ppt');
 
-    const pluginPrefixed = detectPrimaryKeyword('$oh-my-codex:raf-ppt build slides');
+    const pluginPrefixed = detectPrimaryKeyword('$oh-my-codex:gsi-ppt build slides');
     assert.ok(pluginPrefixed);
-    assert.equal(pluginPrefixed.skill, 'raf-ppt');
-    assert.equal(pluginPrefixed.keyword.toLowerCase(), '$oh-my-codex:raf-ppt');
+    assert.equal(pluginPrefixed.skill, 'gsi-ppt');
+    assert.equal(pluginPrefixed.keyword.toLowerCase(), '$oh-my-codex:gsi-ppt');
   });
 
   it('maps intentful ultragoal prose without triggering artifact path mentions', () => {
@@ -556,11 +556,11 @@ describe('keyword registry coverage', () => {
     assert.ok(registryKeywords.has('$autoresearch'));
     assert.ok(registryKeywords.has('$ultragoal'));
     assert.ok(registryKeywords.has('$prometheus-strict'));
-    assert.ok(registryKeywords.has('$raf'));
+    assert.ok(registryKeywords.has('$gsi'));
     assert.ok(registryKeywords.has('$goal-setting'));
     assert.ok(registryKeywords.has('$architecture-spec'));
     assert.ok(registryKeywords.has('$ralph-implement'));
-    assert.ok(registryKeywords.has('$raf-ppt'));
+    assert.ok(registryKeywords.has('$gsi-ppt'));
     assert.ok(registryKeywords.has('ultragoal'));
     assert.ok(registryKeywords.has('autopilot'));
   });

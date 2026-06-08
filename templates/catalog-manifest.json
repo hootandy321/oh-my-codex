@@ -116,7 +116,7 @@
       "internalRequired": false
     },
     {
-      "name": "raf",
+      "name": "gsi",
       "category": "planning",
       "status": "active",
       "core": false,
@@ -144,7 +144,7 @@
       "internalRequired": false
     },
     {
-      "name": "raf-ppt",
+      "name": "gsi-ppt",
       "category": "planning",
       "status": "deprecated",
       "core": false,

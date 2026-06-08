@@ -5,8 +5,7 @@ import { spawnSync } from 'node:child_process';
 import { createInterface } from 'node:readline/promises';
 import { basename, join } from 'node:path';
 import TOML from '@iarna/toml';
-import { codexAgentsDir, codexHome, codexPromptsDir, projectCodexAgentsDir } from '../utils/paths.js';
-import { generateAgentToml } from '../agents/native-config.js';
+import { codexAgentsDir, codexHome, projectCodexAgentsDir } from '../utils/paths.js';
 import { getRegisteredAgent, SAFE_AGENT_NAME_PATTERN } from '../agents/registry.js';
 
 export const RESERVED_NATIVE_AGENT_NAMES = new Set(['default', 'worker', 'explorer']);
@@ -19,12 +18,12 @@ const AGENTS_USAGE = [
   '  omx agents remove <name> [--scope user|project] [--force]',
   '  omx agents refresh [--scope user|project] [--dry-run]',
   '',
-  'Manage Codex native agent TOML files under ~/.codex/agents/ or ./.codex/agents/.',
+  'Manage Codex native agent TOML files under ~/.codex/agents/ or ./.omx/agents/.',
   '',
   'Notes:',
   '  - list shows project + user agents by default',
   '  - add defaults to project scope when this repo is set up for project scope; otherwise user',
-  '  - refresh converts scoped prompts/*.md agent definitions into matching agents/*.toml files',
+  '  - refresh checks scoped agents/*.toml files; dynamic loading no longer reads prompts/*.md',
   '  - remove prompts for confirmation unless --force is passed',
 ].join('\n');
 
@@ -41,11 +40,8 @@ export interface NativeAgentInfo {
 
 export interface NativeAgentRefreshSummary {
   scope: AgentScope;
-  promptsDir: string;
   agentsDir: string;
-  created: string[];
-  updated: string[];
-  unchanged: string[];
+  found: string[];
   skipped: string[];
 }
 
@@ -69,10 +65,6 @@ function normalizeAgentName(name: string): string {
 
 function resolveAgentsDir(scope: AgentScope, cwd = process.cwd()): string {
   return scope === 'project' ? projectCodexAgentsDir(cwd) : codexAgentsDir();
-}
-
-function resolvePromptsDir(scope: AgentScope, cwd = process.cwd()): string {
-  return scope === 'project' ? join(cwd, '.codex', 'prompts') : codexPromptsDir();
 }
 
 function resolveCodexHomeForScope(scope: AgentScope, cwd = process.cwd()): string {
@@ -263,72 +255,47 @@ async function removeNativeAgent(
   return path;
 }
 
-async function refreshNativeAgentsFromPrompts(
+async function refreshNativeAgents(
   options: { cwd?: string; scope?: AgentScope; dryRun?: boolean } = {},
 ): Promise<NativeAgentRefreshSummary> {
   const cwd = options.cwd ?? process.cwd();
   const scope = options.scope ?? inferMutationScope(cwd);
-  const promptsDir = resolvePromptsDir(scope, cwd);
   const agentsDir = resolveAgentsDir(scope, cwd);
   const codexHomeOverride = resolveCodexHomeForScope(scope, cwd);
   const projectRoot = scope === 'project' ? cwd : process.cwd();
   const summary: NativeAgentRefreshSummary = {
     scope,
-    promptsDir,
     agentsDir,
-    created: [],
-    updated: [],
-    unchanged: [],
+    found: [],
     skipped: [],
   };
 
-  if (!existsSync(promptsDir)) return summary;
+  if (!existsSync(agentsDir)) return summary;
 
-  const entries = await readdir(promptsDir, { withFileTypes: true });
-  if (!options.dryRun) {
-    await mkdir(agentsDir, { recursive: true });
-  }
+  const entries = await readdir(agentsDir, { withFileTypes: true });
 
   for (const entry of entries) {
-    if (!entry.isFile() || !entry.name.endsWith('.md')) continue;
-    const name = entry.name.slice(0, -3);
+    if (!entry.isFile() || !entry.name.endsWith('.toml')) continue;
+    const name = entry.name.slice(0, -5);
     if (!SAFE_AGENT_NAME_PATTERN.test(name)) {
       summary.skipped.push(name);
       continue;
     }
-    const promptPath = join(promptsDir, entry.name);
-    const promptContent = await readFile(promptPath, 'utf8');
     const agent = getRegisteredAgent(name, { projectRoot, codexHomeOverride });
     if (!agent) {
       summary.skipped.push(name);
       continue;
     }
-    const nextToml = generateAgentToml(agent, promptContent, { codexHomeOverride });
-    const dst = join(agentsDir, `${name}.toml`);
-    if (!existsSync(dst)) {
-      summary.created.push(name);
-      if (!options.dryRun) await writeFile(dst, nextToml);
-      continue;
-    }
-    const current = await readFile(dst, 'utf8');
-    if (current === nextToml) {
-      summary.unchanged.push(name);
-      continue;
-    }
-    summary.updated.push(name);
-    if (!options.dryRun) await writeFile(dst, nextToml);
+    summary.found.push(name);
   }
 
   return summary;
 }
 
 function printRefreshSummary(summary: NativeAgentRefreshSummary, dryRun: boolean): void {
-  const prefix = dryRun ? 'Would refresh' : 'Refreshed';
-  console.log(`${prefix} ${summary.scope} native agents from ${summary.promptsDir}`);
-  console.log(`Target: ${summary.agentsDir}`);
-  console.log(`created: ${summary.created.length ? summary.created.join(', ') : '-'}`);
-  console.log(`updated: ${summary.updated.length ? summary.updated.join(', ') : '-'}`);
-  console.log(`unchanged: ${summary.unchanged.length ? summary.unchanged.join(', ') : '-'}`);
+  const prefix = dryRun ? 'Would check' : 'Checked';
+  console.log(`${prefix} ${summary.scope} native agents in ${summary.agentsDir}`);
+  console.log(`found: ${summary.found.length ? summary.found.join(', ') : '-'}`);
   console.log(`skipped: ${summary.skipped.length ? summary.skipped.join(', ') : '-'}`);
 }
 
@@ -393,7 +360,7 @@ export async function agentsCommand(args: string[]): Promise<void> {
       return;
     }
     case 'refresh': {
-      const summary = await refreshNativeAgentsFromPrompts({ cwd: process.cwd(), scope, dryRun });
+      const summary = await refreshNativeAgents({ cwd: process.cwd(), scope, dryRun });
       printRefreshSummary(summary, dryRun);
       return;
     }

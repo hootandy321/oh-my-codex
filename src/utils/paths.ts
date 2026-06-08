@@ -153,9 +153,9 @@ export function codexAgentsDir(codexHomeDir?: string): string {
   return join(codexHomeDir || codexHome(), "agents");
 }
 
-/** Project-level Codex native agents directory (.codex/agents/) */
+/** Project-level OMX native agents directory (.omx/agents/) */
 export function projectCodexAgentsDir(projectRoot?: string): string {
-  return join(projectRoot || process.cwd(), ".codex", "agents");
+  return join(projectRoot || process.cwd(), ".omx", "agents");
 }
 
 /** User-level skills directory ($CODEX_HOME/skills, defaults to ~/.codex/skills/) */

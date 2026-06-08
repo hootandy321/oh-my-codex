@@ -1,12 +1,16 @@
 node_modules/
 dist/
 *.tsbuildinfo
+.DS_Store
+**/.DS_Store
 .omc/state/
 .omc/prompts/
 .omc/logs/
 .omc/research/
 .omc/
-.omx/
+.omx/*
+!.omx/agents/
+!.omx/agents/**
 
 # Local agent/worktree artifacts (never commit)
 .claude/
@@ -33,13 +37,9 @@ readiness.json
 replay.json
 snapshot.json
 .codex/*
-!.codex/agents/
-!.codex/agents/**
 !.codex/skills/
 !.codex/skills/**
 .codex/skills/.system/**
-!.codex/prompts/
-!.codex/prompts/**
 
 # ppt-master generated assets: docs/reports/slides/codex-omx-raf-increment-briefing_PPT
 docs/reports/slides/codex-omx-raf-increment-briefing_PPT/images/*

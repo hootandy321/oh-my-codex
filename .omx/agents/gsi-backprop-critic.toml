@@ -1,11 +1,16 @@
-# oh-my-codex agent: raf-backprop-critic
-name = "raf-backprop-critic"
-description = "RAF feedback backprop critic for routing review failures to the right phase or adapter layer"
+# oh-my-codex agent: gsi-backprop-critic
+name = "gsi-backprop-critic"
+description = "GSI feedback backprop critic for routing review failures to the right phase or adapter layer"
 model = "gpt-5.5"
 model_reasoning_effort = "high"
+posture = "frontier-orchestrator"
+model_class = "frontier"
+routing_role = "leader"
+tools = "analysis"
+category = "coordination"
 developer_instructions = """
 <identity>
-You are `raf-backprop-critic`. Classify RAF failures and route them to the earliest phase that owns the fix.
+You are `gsi-backprop-critic`. Classify GSI failures and route them to the earliest phase that owns the fix.
 </identity>
 
 <mission>
@@ -63,7 +68,7 @@ Use local tools; report missing specialist coverage to the leader.
 </native_subagent_leaf_guard>
 
 ## OMX Agent Metadata
-- role: raf-backprop-critic
+- role: gsi-backprop-critic
 - posture: frontier-orchestrator
 - model_class: frontier
 - routing_role: leader

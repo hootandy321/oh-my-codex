@@ -195,7 +195,7 @@ describe("omx setup scope behavior", () => {
       const localSkills = join(wd, ".codex", "skills");
       const localConfig = join(wd, ".codex", "config.toml");
       const localHooks = join(wd, ".codex", "hooks.json");
-      const localAgents = join(wd, ".codex", "agents");
+      const localAgents = join(wd, ".omx", "agents");
       const scopeFile = join(wd, ".omx", "setup-scope.json");
       const agentsMdPath = join(wd, "AGENTS.md");
 
@@ -249,7 +249,7 @@ describe("omx setup scope behavior", () => {
       assert.ok(hooksJson.hooks?.UserPromptSubmit, "hooks.json should register UserPromptSubmit");
       assert.ok(hooksJson.hooks?.Stop, "hooks.json should register Stop");
       const agentsMd = await readFile(agentsMdPath, "utf-8");
-      assert.match(agentsMd, /prompts\/\*\.md/);
+      assert.match(agentsMd, /\.\/\.omx\/agents/);
       assert.match(agentsMd, /\.\/\.codex\/skills/);
       const persistedScope = JSON.parse(await readFile(scopeFile, "utf-8")) as {
         scope: string;
@@ -385,7 +385,7 @@ describe("omx setup scope behavior", () => {
         join(home, ".codex", "AGENTS.md"),
         "utf-8",
       );
-      assert.match(agentsMd, /~\/\.codex\/skills/);
+      assert.match(agentsMd, /\$\{CODEX_HOME:-~\/\.codex\}\/skills|~\/\.codex\/skills/);
       assert.equal(
         await readFile(join(wd, "AGENTS.md"), "utf-8"),
         existingAgents,

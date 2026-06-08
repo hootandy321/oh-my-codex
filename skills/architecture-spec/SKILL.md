@@ -1,11 +1,11 @@
 ---
 name: architecture-spec
-description: RAF Stage 2 architecture, perspectives, variants, and implementation spec for any artifact type
+description: GSI Stage 2 architecture, perspectives, variants, and implementation spec for any artifact type
 ---
 
 # Architecture Spec
 
-`$architecture-spec` is RAF Stage 2. It consumes a goal contract and produces the artifact architecture, perspective map, variant choice, and implementation spec needed before persistent execution.
+`$architecture-spec` is GSI Stage 2. It consumes a goal contract and produces the artifact architecture, perspective map, variant choice, and implementation spec needed before persistent execution.
 
 This skill is artifact-agnostic. It detects what kind of artifact the goal requires and routes to the appropriate agents internally.
 
@@ -17,11 +17,11 @@ This skill is artifact-agnostic. It detects what kind of artifact the goal requi
 
 ## Agent Routing
 
-Common RAF agents:
+Common GSI agents:
 
-- `raf-perspective-splitter`
-- `raf-variant-designer`
-- `raf-backprop-critic`
+- `gsi-perspective-splitter`
+- `gsi-variant-designer`
+- `gsi-backprop-critic`
 
 OMC architecture/spec agents:
 
@@ -110,7 +110,7 @@ Produce an architecture/spec artifact as a Markdown outline document. The body m
     - State how Codex as the main supervisor will review child-agent work.
     - Define which checks can be delegated and which approval gates must remain with the main Codex supervisor.
     - Define when implementation should continue to the next backlog item, backprop to spec/goal, or stop for user authority.
-    - Map the spec into RAF runtime phases: `raf-dispatch`, `raf-verify`, and `raf-backprop`.
+    - Map the spec into GSI runtime phases: `gsi-dispatch`, `gsi-verify`, and `gsi-backprop`.
     - Identify which backlog items can be independent child-agent dispatches and which must stay sequential because of shared files, dependency ordering, or review risk.
   - Backprop rules
     - Define which failures return to `$goal-setting`.
@@ -144,6 +144,6 @@ For presentation tasks, the spec must include:
   - `ppt-master` project plan
   - Evidence required for editable PPTX completion
 
-`ppt-master` calls these design decisions the Eight Confirmations. Inside RAF/OMX, treat them as Stage 2 architecture/spec decisions, not as an ad hoc Stage 3 implementation prompt. If any of the eight decisions require user judgment, ask before handing off to `$ralph-implement`; otherwise record the recommended defaults as approved-by-spec assumptions.
+`ppt-master` calls these design decisions the Eight Confirmations. Inside GSI/OMX, treat them as Stage 2 architecture/spec decisions, not as an ad hoc Stage 3 implementation prompt. If any of the eight decisions require user judgment, ask before handing off to `$ralph-implement`; otherwise record the recommended defaults as approved-by-spec assumptions.
 
 Do not generate the deck in this stage. Produce the spec that `$ralph-implement` will execute.

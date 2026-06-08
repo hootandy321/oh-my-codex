@@ -1,15 +1,15 @@
 ---
 name: goal-setting
-description: RAF Stage 1 goal contract for any artifact type before architecture/spec or implementation work
+description: GSI Stage 1 goal contract for any artifact type before architecture/spec or implementation work
 ---
 
 # Goal Setting
 
-`$goal-setting` is RAF Stage 1. It turns the user's rough request into a goal contract that later agents can execute without losing the user's intent.
+`$goal-setting` is GSI Stage 1. It turns the user's rough request into a goal contract that later agents can execute without losing the user's intent.
 
 This skill is artifact-agnostic. Do not ask the user to pick PPT, code, document, report, or research mode up front. Detect the likely artifact type from the request and record that classification as routing context, not as a separate workflow branch.
 
-Goal-setting is the most important RAF stage. It must reuse the `$deep-interview` clarification model rather than acting as a one-shot summarizer.
+Goal-setting is the most important GSI stage. It must reuse the `$deep-interview` clarification model rather than acting as a one-shot summarizer.
 
 ## Use When
 
@@ -21,7 +21,7 @@ Goal-setting is the most important RAF stage. It must reuse the `$deep-interview
 
 Primary agents:
 
-- `raf-goal-setter`
+- `gsi-goal-setter`
 - `analyst`
 
 Deep-interview intake support:
@@ -43,7 +43,7 @@ Artifact classifiers:
 - UX/product tasks: `designer`
 - Code/product tasks: `architect` only as a boundary advisor, not as the implementation planner.
 - Document/report tasks: `writer`
-- Other artifact types: use the closest existing specialist, but keep `raf-goal-setter` and `analyst` as the owners.
+- Other artifact types: use the closest existing specialist, but keep `gsi-goal-setter` and `analyst` as the owners.
 
 ## Deep-Interview Reuse Contract
 
@@ -66,7 +66,7 @@ Run goal-setting as an interview-backed clarification loop unless the prompt alr
   - Do not freeze the goal while ambiguity is above the selected threshold unless the user explicitly accepts residual risk.
 - Depth profiles
   - Quick: use when the user asks for a fast pass or the task is already mostly clear.
-  - Standard: default for normal RAF goal-setting.
+  - Standard: default for normal GSI goal-setting.
   - Deep: use when the artifact is high-stakes, cross-functional, concept-heavy, or repeatedly misunderstood.
 - Crystallization
   - Write the final goal contract as the stage artifact.

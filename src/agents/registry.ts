@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { basename, join } from "node:path";
 import TOML from "@iarna/toml";
 import { AGENT_DEFINITIONS, type AgentDefinition } from "./definitions.js";
 import { codexHome, codexAgentsDir, projectCodexAgentsDir } from "../utils/paths.js";
@@ -188,25 +188,6 @@ function mergeAgent(
   registry[next.name] = previous ? { ...previous, ...next, name: next.name } : next;
 }
 
-function readMarkdownAgentsFromDir(
-  registry: Record<string, AgentDefinition>,
-  promptsDir: string,
-): void {
-  if (!existsSync(promptsDir)) return;
-  for (const entry of readdirSync(promptsDir, { withFileTypes: true })) {
-    if (!entry.isFile() || !entry.name.endsWith(".md")) continue;
-    const name = entry.name.slice(0, -3);
-    if (!normalizeAgentName(name)) continue;
-    try {
-      const content = readFileSync(join(promptsDir, entry.name), "utf-8");
-      const parsed = parseAgentMarkdownDefinition(content, name, registry[name]);
-      if (parsed) mergeAgent(registry, parsed);
-    } catch {
-      continue;
-    }
-  }
-}
-
 function readTomlAgentsFromDir(
   registry: Record<string, AgentDefinition>,
   agentsDir: string,
@@ -237,11 +218,9 @@ function isGeneratedOmxNativeAgentToml(content: string, agentName: string): bool
 function loadScope(
   registry: Record<string, AgentDefinition>,
   _source: AgentSource,
-  promptsDir: string,
   agentsDir: string,
 ): void {
   void _source;
-  readMarkdownAgentsFromDir(registry, promptsDir);
   readTomlAgentsFromDir(registry, agentsDir);
 }
 
@@ -252,13 +231,12 @@ export function loadAgentRegistry(
     ? {}
     : { ...AGENT_DEFINITIONS };
   const codexHomeDir = options.codexHomeOverride ?? codexHome();
-  loadScope(registry, "user", join(codexHomeDir, "prompts"), codexAgentsDir(codexHomeDir));
+  loadScope(registry, "user", codexAgentsDir(codexHomeDir));
 
   const projectRoot = options.projectRoot ?? process.cwd();
   loadScope(
     registry,
     "project",
-    join(projectRoot, ".codex", "prompts"),
     projectCodexAgentsDir(projectRoot),
   );
   return registry;
@@ -285,7 +263,9 @@ export function loadNativeAgentInstructionsFromPromptsDir(
 ): string | null {
   const normalized = normalizeAgentName(role);
   if (!normalized) return null;
-  const agentsDir = join(dirname(promptsDir), "agents");
+  const agentsDir = basename(promptsDir) === "prompts"
+    ? join(promptsDir, "..", "agents")
+    : promptsDir;
   const filePath = join(agentsDir, `${normalized}.toml`);
   if (!existsSync(filePath)) return null;
   try {

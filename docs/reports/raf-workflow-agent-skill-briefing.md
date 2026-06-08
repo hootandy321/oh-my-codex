@@ -1,8 +1,8 @@
-# RAF 设计梳理：Skill、Agent、Workflow
+# GSI 设计梳理：Skill、Agent、Workflow
 
 ## 这份文档要回答什么
 
-- 这份文档只回答 RAF 这次到底搭了什么。
+- 这份文档只回答 GSI 这次到底搭了什么。
   - 加了哪些 skill。
   - 接了哪些 agent。
   - 三阶段 workflow 怎么跑。
@@ -11,23 +11,23 @@
 - 这份文档不做代码 diff 走读。
   - 不按文件逐个解释实现细节。
   - 不把重点放在构建、npm、代理或发布过程。
-  - 不把 RAF 讲成 PPT 工具。
+  - 不把 GSI 讲成 PPT 工具。
 
 ## 一句话结论
 
-- RAF 是一个“先澄清目标、再定规格、最后持续实现和验证”的任务治理流程。
+- GSI 是一个“先澄清目标、再定规格、最后持续实现和验证”的任务治理流程。
   - 用户不需要一开始选 PPT、代码、报告或研究模式。
-  - 用户只需要进入 `$raf`，RAF 会先确认目标，再在规格阶段识别产物类型，最后分配合适的 agent 和工具去完成。
+  - 用户只需要进入 `$gsi`，GSI 会先确认目标，再在规格阶段识别产物类型，最后分配合适的 agent 和工具去完成。
   - 失败时不是笼统“再优化”，而是判断应该回到目标、规格，还是实现阶段修。
 
 ## 这次实际搭了哪些东西
 
-- 这次新增和调整的是一组 RAF skills。
-  - `$raf` 是总入口。
+- 这次新增和调整的是一组 GSI skills。
+  - `$gsi` 是总入口。
     - 它负责把三阶段串起来。
-    - 它支持 `$raf <task>` 自动跑完整流程。
-    - 它也支持 `$raf --team=auto|manual|off <task>` 声明 Team 使用策略。
-    - 落地文件：`skills/raf/SKILL.md` 和 `plugins/oh-my-codex/skills/raf/SKILL.md`。
+    - 它支持 `$gsi <task>` 自动跑完整流程。
+    - 它也支持 `$gsi --team=auto|manual|off <task>` 声明 Team 使用策略。
+    - 落地文件：`skills/gsi/SKILL.md` 和 `plugins/oh-my-codex/skills/gsi/SKILL.md`。
   - `$goal-setting` 是需求/目标阶段。
     - 它负责把用户的粗略想法变成目标契约。
     - 它的重点不是总结用户，而是通过多轮确认把目标、非目标、验收标准和授权边界问清楚。
@@ -42,18 +42,17 @@
     - 它不只做第一个任务项；如果当前项完成且下一个任务仍在批准范围内，它继续做下一个。
     - 它可以直接做，也可以调 native child agents，也可以按 `team_policy` 调 OMX Team。
     - 落地文件：`skills/ralph-implement/SKILL.md` 和 `plugins/oh-my-codex/skills/ralph-implement/SKILL.md`。
-  - `$raf-ppt` 只保留为兼容说明。
+  - `$gsi-ppt` 只保留为兼容说明。
     - 它不再是独立 PPT workflow。
-    - 它告诉用户 PPT 也应该走通用 `$raf -> goal-setting -> architecture-spec -> ralph-implement`。
-    - 落地文件：`skills/raf-ppt/SKILL.md`。
-- 这次接入了一组 RAF 专用 agent。
-  - `raf-goal-setter` 负责冻结目标契约。
-  - `raf-perspective-splitter` 负责把目标拆成用户、受众、实现者、评审者、维护者等视角。
-  - `raf-variant-designer` 负责设计 champion/challenger 方案，而不是只给一个默认方案。
-  - `raf-rough-loop-runner` 负责在实现阶段推进可验证的执行循环。
-  - `raf-backprop-critic` 负责判断失败应该回到哪个阶段。
-  - 这些 agent 的 prompt 在 `.codex/prompts/raf-*.md`。
-  - 这些 agent 的 Codex native 配置在 `.codex/agents/raf-*.toml`。
+    - 它告诉用户 PPT 也应该走通用 `$gsi -> goal-setting -> architecture-spec -> ralph-implement`。
+    - 落地文件：`skills/gsi-ppt/SKILL.md`。
+- 这次接入了一组 GSI 专用 agent。
+  - `gsi-goal-setter` 负责冻结目标契约。
+  - `gsi-perspective-splitter` 负责把目标拆成用户、受众、实现者、评审者、维护者等视角。
+  - `gsi-variant-designer` 负责设计 champion/challenger 方案，而不是只给一个默认方案。
+  - `gsi-rough-loop-runner` 负责在实现阶段推进可验证的执行循环。
+  - `gsi-backprop-critic` 负责判断失败应该回到哪个阶段。
+  - 这些 agent 的项目级配置在 `.omx/agents/gsi-*.toml`。
 - 这次接入了一组 PPT route agent。
   - `ppt-intent-classifier` 判断一个任务是不是 PPT/deck，并提取 PPT 所需目标信息。
   - `ppt-narrative-architect` 负责 deck 的论证主线。
@@ -61,9 +60,8 @@
   - `ppt-visual-director` 负责视觉方向，但不替代 `ppt-master`。
   - `ppt-speaker-notes-planner` 负责区分页面可见文字和讲稿内容。
   - `ppt-reviewer` 负责从叙事、可读性、视觉一致性、可编辑性和证据完整度审查 deck。
-  - `ppt-master-adapter` 负责把 RAF 的 goal/spec 交给 `ppt-master`，并收集 PPTX 完成证据。
-  - 这些 agent 的 prompt 在 `.codex/prompts/ppt-*.md`。
-  - 这些 agent 的 Codex native 配置在 `.codex/agents/ppt-*.toml`。
+  - `ppt-master-adapter` 负责把 GSI 的 goal/spec 交给 `ppt-master`，并收集 PPTX 完成证据。
+  - 这些 agent 的项目级配置在 `.omx/agents/ppt-*.toml`。
 - 这次复用了 OMC 已有通用 agent。
   - goal-setting 主要复用 `analyst`、`explore`、`researcher`、`critic`、`scholastic`。
   - architecture-spec 主要复用 `architect`、`planner`、`test-engineer`、`dependency-expert`、`designer`、`writer`、`researcher`、`vision`、`critic`。
@@ -74,12 +72,12 @@
   - PPT 实现必须通过这个 helper 找到 `ppt-master`。
   - 如果找不到依赖，流程要明确阻塞，而不是换一个普通 PPT 生成器糊过去。
 - 这次加了契约测试来锁住设计。
-  - 测试文件是 `src/hooks/__tests__/raf-ppt-skill-contract.test.ts`。
+  - 测试文件是 `src/hooks/__tests__/gsi-ppt-skill-contract.test.ts`。
   - 它检查三阶段、outline 输出、deep-interview 复用、agent 挂载、Team policy、PPT master 依赖、Eight Confirmations 分层等关键规则。
 
 ## Skill 是怎么设计的
 
-- `$raf` 的设计目标是做总控，而不是做具体产物。
+- `$gsi` 的设计目标是做总控，而不是做具体产物。
   - 它接收用户任务。
   - 它决定走自动模式还是手动阶段模式。
   - 它监督 `$goal-setting`、`$architecture-spec`、`$ralph-implement` 的交接。
@@ -133,19 +131,19 @@
 - Codex supervisor 是主位。
   - 所有 child agents、PPT agents、Team workers 都只是执行或审查某个边界清楚的子任务。
   - Codex supervisor 负责维护目标、规格、backlog、验证结果和最终判断。
-  - 子 agent 不能自己扩大范围，也不能自己宣布整个 RAF 完成。
+  - 子 agent 不能自己扩大范围，也不能自己宣布整个 GSI 完成。
 - Agent 按阶段挂载。
   - 需求阶段用能澄清目标的 agent。
-    - `raf-goal-setter` 负责最终 goal contract。
+    - `gsi-goal-setter` 负责最终 goal contract。
     - `analyst` 找需求缺口和验收标准。
     - `explore` 先查项目事实，减少无意义提问。
     - `critic` 检查假设、非目标和授权边界。
   - 规格阶段用能设计结构的 agent。
-    - `raf-perspective-splitter` 拆视角。
-    - `raf-variant-designer` 做方案变体。
+    - `gsi-perspective-splitter` 拆视角。
+    - `gsi-variant-designer` 做方案变体。
     - `architect` 和 `planner` 把方案变成可执行结构。
     - `test-engineer` 定义验证方式。
-    - `raf-backprop-critic` 提前定义失败应该怎么归因。
+    - `gsi-backprop-critic` 提前定义失败应该怎么归因。
   - 实现阶段用能执行、诊断和验证的 agent。
     - `executor` 做实现。
     - `debugger` 查失败原因。
@@ -166,9 +164,9 @@
   - 确认 goal contract 没问题后，再调用 `$architecture-spec`。
   - 确认 spec/backlog/verification 没问题后，再调用 `$ralph-implement`。
   - 这种模式适合需求复杂、用户想逐步批准的任务。
-- 自动模式适合让 RAF 自己推进。
-  - 用户调用 `$raf <task>`。
-  - RAF 自动进入 goal-setting。
+- 自动模式适合让 GSI 自己推进。
+  - 用户调用 `$gsi <task>`。
+  - GSI 自动进入 goal-setting。
   - goal gate 通过后自动进入 architecture-spec。
   - spec gate 通过后自动进入 ralph-implement。
   - 每个 implementation item 都必须验证。
@@ -194,18 +192,18 @@
   - 缺用户授权，停在 user authority gate。
 - Team 是实现阶段的可选执行引擎。
   - `team_policy: auto`
-    - RAF 可以在条件满足时自动启动或推荐 Team。
+    - GSI 可以在条件满足时自动启动或推荐 Team。
     - 前提是任务能拆成独立 lane，文件边界明确，runtime 可用，Codex 能监控 ACK/status/evidence。
   - `team_policy: manual`
-    - RAF 只给 Team launch hint，不自动启动。
+    - GSI 只给 Team launch hint，不自动启动。
   - `team_policy: off`
-    - RAF 不调用 Team，只用 direct work 或 native child agents。
-  - 无论哪种策略，Team 都不拥有 RAF 状态。
+    - GSI 不调用 Team，只用 direct work 或 native child agents。
+  - 无论哪种策略，Team 都不拥有 GSI 状态。
 
 ## PPT route 是怎么接进去的
 
 - PPT route 不在入口处分叉。
-  - 用户不用调用 `$raf-ppt`。
+  - 用户不用调用 `$gsi-ppt`。
   - 用户说“做 PPT、deck、slides、PowerPoint、ppt-master”等，goal/spec 阶段会识别这是 presentation artifact。
 - PPT 的设计决策放在 `$architecture-spec`。
   - `ppt-master` 的 Eight Confirmations 是规格决策。
@@ -224,9 +222,9 @@
   - 然后通过 `uv run` 调 `ppt-master` 脚本执行。
   - 最终完成标准是有真实可编辑的 `exports/*.pptx`。
 
-## 例子：这次 PPT 任务按 RAF 三阶段怎么跑
+## 例子：这次 PPT 任务按 GSI 三阶段怎么跑
 
-- 这个例子不是讲“做了哪些文件”，而是讲同一个 PPT 任务在 RAF 结构下每一阶段应该怎么判断。
+- 这个例子不是讲“做了哪些文件”，而是讲同一个 PPT 任务在 GSI 结构下每一阶段应该怎么判断。
   - 它要能和上面的 `Workflow 图` 对上。
   - 它也要能和“三阶段 V 模型”对上：左侧先收敛目标和规格，右侧执行后用验证结果反向归因。
   - 所以这里按阶段复制一遍本次任务的 goal、spec、implementation 逻辑。
@@ -245,11 +243,11 @@ flowchart LR
 ```
 
 - 和 `Workflow 图` 的节点对齐。
-  - 用户请求进入 RAF。
-    - 本次请求是“给上级做 RAF/OMX 增量汇报 PPT”。
+  - 用户请求进入 GSI。
+    - 本次请求是“给上级做 GSI/OMX 增量汇报 PPT”。
     - 这一层还不判断页数、配色或 `ppt-master`，只识别这是一个需要治理的复杂产物请求。
   - `$goal-setting` 负责澄清目标。
-    - 本次要澄清的是“重点不是实现清单，而是 RAF 增量逻辑”。
+    - 本次要澄清的是“重点不是实现清单，而是 GSI 增量逻辑”。
     - 这一阶段冻结上级受众、增量重点、非目标和完成标准。
     - 它的输出是 Stage 1 产物：goal contract。
   - `$architecture-spec` 负责生成规格。
@@ -261,7 +259,7 @@ flowchart LR
     - 它不重新决定“要几页、什么风格、面向谁”，只消费 Stage 2 的规格。
     - 它的输出是 Stage 3 产物：最终产物 + 验证证据。
   - `rubric 是否满足` 负责验收。
-    - 本次验收的是是否讲清 RAF 三层 V、OMX 区别、动态加载、边界和决策请求。
+    - 本次验收的是是否讲清 GSI 三层 V、OMX 区别、动态加载、边界和决策请求。
     - 如果满足，就进入 complete。
     - 如果不满足，先判断失败归因。
   - 失败回传不是笼统返工。
@@ -291,15 +289,15 @@ flowchart LR
 
 - Stage 1 要回答“到底要做什么”，不是回答“怎么做 PPT”。
   - 用户原话的核心不是“生成一个 PPT”。
-  - 核心是“给上级讲 RAF/OMX 的能力增量”。
+  - 核心是“给上级讲 GSI/OMX 的能力增量”。
   - 所以 Stage 1 先把目标冻结，避免后面变成代码 diff、工具介绍或普通汇报模板。
 - 本次 Stage 1 可以复制成这样的 goal contract。
   - `user_words`
     - “我需要给上级。”
     - “重点不在于实现了什么，在于增量。”
-    - “比如 RAF 这个三层 V 架构、和原来 OMX 的区别、以及动态运行时加载 skill。”
+    - “比如 GSI 这个三层 V 架构、和原来 OMX 的区别、以及动态运行时加载 skill。”
   - `true_intent`
-    - 用 PPT 解释 RAF 作为复杂任务治理模型的价值。
+    - 用 PPT 解释 GSI 作为复杂任务治理模型的价值。
     - 让上级判断这套结构是否值得继续作为 OMX 的下一阶段方向投入。
   - `audience`
     - 上级。
@@ -308,21 +306,21 @@ flowchart LR
     - 8 到 12 分钟汇报 PPT。
     - 最终产物必须是可编辑 PPTX，而不是 outline、HTML mock 或截图。
   - `success_rubric`
-    - 能讲清楚 RAF 三层 V 架构。
-    - 能讲清楚原 OMX 和 RAF 的关系：OMX 是执行底座，RAF 是治理层。
+    - 能讲清楚 GSI 三层 V 架构。
+    - 能讲清楚原 OMX 和 GSI 的关系：OMX 是执行底座，GSI 是治理层。
     - 能讲清楚动态运行时加载 agent/skill 的价值。
     - 有必要实现证据支撑论点。
     - 不把主线变成“我改了哪些文件”。
   - `non_goals`
     - 不讲 npm、代理、构建环境。
     - 不做逐文件 diff 走读。
-    - 不把 RAF 讲成 PPT 专用流程。
+    - 不把 GSI 讲成 PPT 专用流程。
     - 不宣称任意 JS/TS 代码插件已经动态化。
   - `handoff_to_stage_2`
     - 下一阶段要先做论点和结构设计。
     - 然后再决定页数、视觉、讲稿、`ppt-master` 规格和验证计划。
 - 本次文件对应。
-  - `docs/reports/codex-omx-raf-increment-briefing.md` 的 `Source Contract`。
+  - `docs/reports/codex-omx-gsi-increment-briefing.md` 的 `Source Contract`。
 
 ### Stage 2：本次 architecture/spec 应该长什么样
 
@@ -332,24 +330,24 @@ flowchart LR
 - 本次 Stage 2 可以复制成这样的 architecture/spec。
   - `artifact_route`
     - `presentation/deck`。
-    - `$raf-ppt` 只是兼容入口，不拥有独立 workflow。
+    - `$gsi-ppt` 只是兼容入口，不拥有独立 workflow。
   - `perspective_map`
     - 上级视角：这轮投入带来什么可复用能力。
     - 原 OMX 视角：已有强执行底座和运行时编排。
-    - RAF 视角：新增目标契约、架构规格、实现闭环和 backprop。
+    - GSI 视角：新增目标契约、架构规格、实现闭环和 backprop。
     - 工程扩展视角：动态 agent/skill 从源码内置变成项目级配置、刷新、验证、再沉淀。
     - 风险视角：不能说成任意代码插件，也不能说成 PPT 工具。
   - `selected_narrative`
     - 先讲管理问题：复杂任务容易目标漂移。
-    - 再讲方法增量：RAF 三层 V。
+    - 再讲方法增量：GSI 三层 V。
     - 再讲工程增量：动态运行时加载。
     - 再讲验证路径：PPT 是首个高压场景。
-    - 最后给决策请求：是否把 RAF 作为复杂任务组织模型继续推进。
+    - 最后给决策请求：是否把 GSI 作为复杂任务组织模型继续推进。
   - `page_plan`
     - P01：一句话结论。
     - P02：为什么上级需要关心。
-    - P03：原 OMX 与 RAF 的定位差异。
-    - P04：RAF 三层 V 架构。
+    - P03：原 OMX 与 GSI 的定位差异。
+    - P04：GSI 三层 V 架构。
     - P05：动态加载带来的扩展方式变化。
     - P06：PPT 路径为什么适合首个验证。
     - P07：实现证据矩阵。
@@ -383,9 +381,9 @@ flowchart LR
     - 如果叙事、页数、视觉策略、Eight Confirmations 错了，回 Stage 2。
     - 如果只是 SVG、notes、字体、导出、检查问题，留在 Stage 3 修。
 - 本次文件对应。
-  - `docs/reports/codex-omx-raf-increment-briefing.md` 的 `Deck Narrative`、`Audience Decision Narrative`、slide plan、`Architecture-Spec Design Decisions For PPT-Master`、`Backprop Ledger`。
-  - `docs/reports/slides/codex-omx-raf-increment-briefing_PPT/design_spec.md`。
-  - `docs/reports/slides/codex-omx-raf-increment-briefing_PPT/spec_lock.md`。
+  - `docs/reports/codex-omx-gsi-increment-briefing.md` 的 `Deck Narrative`、`Audience Decision Narrative`、slide plan、`Architecture-Spec Design Decisions For PPT-Master`、`Backprop Ledger`。
+  - `docs/reports/slides/codex-omx-gsi-increment-briefing_PPT/design_spec.md`。
+  - `docs/reports/slides/codex-omx-gsi-increment-briefing_PPT/spec_lock.md`。
 
 ### Stage 3：本次 implementation record 应该长什么样
 
@@ -402,7 +400,7 @@ flowchart LR
     - 使用 `design_spec.md` 和 `spec_lock.md`。
   - `dispatch`
     - 通过 `ensure-ppt-master-skill.sh` 解析 `ppt-master`。
-    - 进入 `docs/reports/slides/codex-omx-raf-increment-briefing_PPT/`。
+    - 进入 `docs/reports/slides/codex-omx-gsi-increment-briefing_PPT/`。
     - 使用 `uv run` 执行 `ppt-master` 脚本。
   - `implementation_steps`
     - 写入 `notes/total.md`。
@@ -418,7 +416,7 @@ flowchart LR
     - PPTX package：9 个 `ppt/slides/slide*.xml`，9 个 `ppt/notesSlides/notesSlide*.xml`。
     - `unzip -t`：No errors detected。
   - `final_artifact`
-    - `docs/reports/slides/codex-omx-raf-increment-briefing_PPT/exports/codex-omx-raf-increment-briefing.pptx`。
+    - `docs/reports/slides/codex-omx-gsi-increment-briefing_PPT/exports/codex-omx-gsi-increment-briefing.pptx`。
 - 本次 backprop 怎么发生。
   - 当用户问“这个是第几层的产出？甲方还是乙方视角？论点还是逐页稿？”
     - 这不是页面实现问题。
@@ -488,11 +486,11 @@ flowchart TD
   Supervisor --> PptAgents["PPT route agents"]
   Supervisor --> Team["OMX Team: 可选执行引擎"]
 
-  GoalAgents --> A1["raf-goal-setter / analyst / explore / critic"]
-  SpecAgents --> A2["raf-perspective-splitter / raf-variant-designer / architect / planner / test-engineer"]
-  ImplAgents --> A3["raf-rough-loop-runner / executor / debugger / verifier / reviewer"]
+  GoalAgents --> A1["gsi-goal-setter / analyst / explore / critic"]
+  SpecAgents --> A2["gsi-perspective-splitter / gsi-variant-designer / architect / planner / test-engineer"]
+  ImplAgents --> A3["gsi-rough-loop-runner / executor / debugger / verifier / reviewer"]
   PptAgents --> A4["ppt-narrative / ppt-page / ppt-visual / ppt-notes / ppt-reviewer / ppt-master-adapter"]
-  Team --> A5["只执行分配任务，不拥有 RAF 状态"]
+  Team --> A5["只执行分配任务，不拥有 GSI 状态"]
 ```
 
 ## 如果觉得流程不合适，怎么改
@@ -506,11 +504,11 @@ flowchart TD
 - 如果觉得实现阶段不对，改 `$ralph-implement`。
   - 典型问题：不该继续做、该继续却停了、Team 触发不对、验证证据不够、backprop 判断不对。
   - 修改文件：`skills/ralph-implement/SKILL.md` 和 `plugins/oh-my-codex/skills/ralph-implement/SKILL.md`。
-- 如果觉得全流程自动推进不对，改 `$raf`。
+- 如果觉得全流程自动推进不对，改 `$gsi`。
   - 典型问题：阶段切换太快、该问用户时没问、该自动继续时停了、Team policy 入口不清楚。
-  - 修改文件：`skills/raf/SKILL.md` 和 `plugins/oh-my-codex/skills/raf/SKILL.md`。
+  - 修改文件：`skills/gsi/SKILL.md` 和 `plugins/oh-my-codex/skills/gsi/SKILL.md`。
 - 如果改了行为规则，要同步改测试。
-  - 测试文件：`src/hooks/__tests__/raf-ppt-skill-contract.test.ts`。
+  - 测试文件：`src/hooks/__tests__/gsi-ppt-skill-contract.test.ts`。
   - 验证命令：
     - `npm run build`
-    - `node dist/scripts/run-test-files.js dist/hooks/__tests__/raf-ppt-skill-contract.test.js`
+    - `node dist/scripts/run-test-files.js dist/hooks/__tests__/gsi-ppt-skill-contract.test.js`

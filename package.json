@@ -73,8 +73,7 @@
     "src/scripts/",
     "plugins/",
     ".agents/plugins/marketplace.json",
-    ".codex/prompts/",
-    ".codex/agents/"
+    ".omx/agents/"
   ],
   "keywords": [
     "codex",

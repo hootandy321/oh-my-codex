@@ -1,6 +1,6 @@
-# RAF/PPT ppt-master Dependency
+# GSI/PPT ppt-master Dependency
 
-RAF presentation routes use `ppt-master` to generate editable PPTX decks. The `ppt-master` implementation is kept as a separate repository instead of being vendored into this GitHub repository.
+GSI presentation routes use `ppt-master` to generate editable PPTX decks. The `ppt-master` implementation is kept as a separate repository instead of being vendored into this GitHub repository.
 
 ## Automatic Resolution
 
@@ -52,4 +52,4 @@ export PPT_MASTER_SKILL_DIR=/path/to/wxyteam-pptmaster-skill/skills/ppt-master
 
 ## Failure Contract
 
-If `ppt-master` cannot be resolved or cloned, RAF/PPT implementation must stop with a dependency blocker and show the Bitbucket URL above. It must not substitute a generic presentation generator, HTML mock, or outline-only result.
+If `ppt-master` cannot be resolved or cloned, GSI/PPT implementation must stop with a dependency blocker and show the Bitbucket URL above. It must not substitute a generic presentation generator, HTML mock, or outline-only result.

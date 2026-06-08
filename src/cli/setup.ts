@@ -25,6 +25,7 @@ import {
 	codexConfigPath,
 	codexPromptsDir,
 	codexAgentsDir,
+	projectCodexAgentsDir,
 	userSkillsDir,
 	omxStateDir,
 	detectLegacySkillRootOverlap,
@@ -233,17 +234,17 @@ export interface SkillFrontmatterMetadata {
 }
 
 const PROJECT_GITIGNORE_ENTRIES = [
-	".omx/",
+	".omx/*",
+	"!.omx/agents/",
+	"!.omx/agents/**",
 	".codex/*",
-	"!.codex/agents/",
-	"!.codex/agents/**",
 	"!.codex/skills/",
 	"!.codex/skills/**",
 	".codex/skills/.system/**",
 	"!.codex/prompts/",
 	"!.codex/prompts/**",
 ] as const;
-const LEGACY_PROJECT_GITIGNORE_ENTRIES = [".codex/"] as const;
+const LEGACY_PROJECT_GITIGNORE_ENTRIES = [".omx/", ".codex/"] as const;
 const SETUP_ONLY_INSTALLABLE_SKILLS = new Set(["wiki"]);
 const DEFAULT_SETUP_MCP_MODE: SetupMcpMode = "none";
 const HARD_DEPRECATED_SKILL_NAMES = new Set(["web-clone"]);
@@ -274,8 +275,7 @@ function applyScopePathRewritesToAgentsTemplate(
 	content: string,
 	scope: SetupScope,
 ): string {
-	if (scope !== "project") return content;
-	return content.replaceAll("~/.codex", "./.codex");
+	return content;
 }
 
 function applyPluginModeWordingToAgentsTemplate(
@@ -288,7 +288,7 @@ function applyPluginModeWordingToAgentsTemplate(
 			? "`./.codex/skills` for project scope, or `~/.codex/skills` for user-installed skills"
 			: "`~/.codex/skills`";
 	return scopedContent.replace(
-		/Role prompts under `prompts\/\*\.md` are narrower execution surfaces\. They must follow this file, not override it\.\nWhen OMX is installed, load the installed prompt\/skill\/agent surfaces from [^\n]+active\)\./,
+		/Native agents are loaded from [^\n]+\nWhen OMX is installed, load the installed skill and agent surfaces from those scoped directories\./,
 		`Registered Codex plugin marketplace surfaces supply OMX workflows and plugin-scoped companion resources when the plugin is installed. Native agent roles are installed as setup-owned Codex agent TOML files in plugin mode so agent_type routing works. They must follow this file, not override it.\nUser-installed skills may still live under ${userSkillPath}.`,
 		);
 }
@@ -629,7 +629,7 @@ export function resolveScopeDirectories(
 			codexConfigFile: join(codexHomeDir, "config.toml"),
 			codexHomeDir,
 			codexHooksFile: join(codexHomeDir, "hooks.json"),
-			nativeAgentsDir: join(codexHomeDir, "agents"),
+			nativeAgentsDir: projectCodexAgentsDir(projectRoot),
 			promptsDir: join(codexHomeDir, "prompts"),
 			skillsDir: join(codexHomeDir, "skills"),
 		};
@@ -2010,11 +2010,11 @@ export async function setup(options: SetupOptions = {}): Promise<void> {
 		);
 		if (gitignoreResult === "created") {
 			console.log(
-				"  Created .gitignore with OMX project ignore rules so local runtime state stays out of source control while .codex agents, skills, and prompts remain trackable.\n",
+				"  Created .gitignore with OMX project ignore rules so local runtime state stays out of source control while .omx agents plus .codex skills/prompts remain trackable.\n",
 			);
 		} else if (gitignoreResult === "updated") {
 			console.log(
-				"  Updated .gitignore with OMX project ignore rules so local runtime state stays out of source control while .codex agents, skills, and prompts remain trackable.\n",
+				"  Updated .gitignore with OMX project ignore rules so local runtime state stays out of source control while .omx agents plus .codex skills/prompts remain trackable.\n",
 			);
 		}
 	}
@@ -2747,7 +2747,7 @@ export async function setup(options: SetupOptions = {}): Promise<void> {
 			"  4. Optional AGENTS.md and developer_instructions defaults are only installed when selected during plugin-mode setup",
 		);
 		console.log(
-			"  5. Native agent role TOML files written to .codex/agents/ for agent_type routing",
+			`  5. Native agent role TOML files written to ${scopeDirs.nativeAgentsDir} for agent_type routing`,
 		);
 	} else {
 		console.log(
@@ -2760,7 +2760,7 @@ export async function setup(options: SetupOptions = {}): Promise<void> {
 			"  4. The AGENTS.md orchestration brain is loaded automatically",
 		);
 		console.log(
-			"  5. Native agent defaults configured in config.toml [agents] and TOML files written to .codex/agents/",
+			`  5. Native agent defaults configured in config.toml [agents] and TOML files written to ${scopeDirs.nativeAgentsDir}`,
 		);
 	}
 	console.log(

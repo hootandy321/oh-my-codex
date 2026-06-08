@@ -6,7 +6,7 @@ import { describe, it } from "node:test";
 import { getRegisteredAgent, getRegisteredAgentNames } from "../registry.js";
 
 describe("agents/registry", () => {
-  it("loads project Markdown agents with OMX metadata frontmatter", async () => {
+  it("does not load dynamic agents from project Markdown prompt paths", async () => {
     const root = await mkdtemp(join(tmpdir(), "omx-agent-registry-md-"));
     const codexHome = join(root, "codex-home");
     try {
@@ -31,17 +31,11 @@ describe("agents/registry", () => {
         codexHomeOverride: codexHome,
       });
 
-      assert.equal(agent?.description, "Repo-specific specialist");
-      assert.equal(agent?.reasoningEffort, "high");
-      assert.equal(agent?.posture, "frontier-orchestrator");
-      assert.equal(agent?.modelClass, "frontier");
-      assert.equal(agent?.routingRole, "leader");
-      assert.equal(agent?.tools, "read-only");
-      assert.equal(agent?.category, "domain");
-      assert.ok(getRegisteredAgentNames({
+      assert.equal(agent, undefined);
+      assert.equal(getRegisteredAgentNames({
         projectRoot: root,
         codexHomeOverride: codexHome,
-      }).includes("repo-specialist"));
+      }).includes("repo-specialist"), false);
     } finally {
       await rm(root, { recursive: true, force: true });
     }
@@ -52,7 +46,7 @@ describe("agents/registry", () => {
     const codexHome = join(root, "codex-home");
     try {
       await mkdir(join(codexHome, "agents"), { recursive: true });
-      await mkdir(join(root, ".codex", "agents"), { recursive: true });
+      await mkdir(join(root, ".omx", "agents"), { recursive: true });
       await writeFile(join(codexHome, "agents", "custom-agent.toml"), [
         'name = "custom-agent"',
         'description = "User custom agent"',
@@ -60,7 +54,7 @@ describe("agents/registry", () => {
         'model_reasoning_effort = "medium"',
         'tools = "analysis"',
       ].join("\n"));
-      await writeFile(join(root, ".codex", "agents", "custom-agent.toml"), [
+      await writeFile(join(root, ".omx", "agents", "custom-agent.toml"), [
         'name = "custom-agent"',
         'description = "Project custom agent"',
         'model = "gpt-custom"',
@@ -85,7 +79,7 @@ describe("agents/registry", () => {
     }
   });
 
-  it("loads RAF/PPT project roles from dynamic project prompts", async () => {
+  it("loads GSI/PPT project roles from dynamic project agents", async () => {
     const codexHome = await mkdtemp(join(tmpdir(), "omx-agent-registry-empty-home-"));
     try {
       const registryNames = getRegisteredAgentNames({
@@ -95,11 +89,11 @@ describe("agents/registry", () => {
       });
 
       for (const name of [
-        "raf-goal-setter",
-        "raf-perspective-splitter",
-        "raf-variant-designer",
-        "raf-rough-loop-runner",
-        "raf-backprop-critic",
+        "gsi-goal-setter",
+        "gsi-perspective-splitter",
+        "gsi-variant-designer",
+        "gsi-rough-loop-runner",
+        "gsi-backprop-critic",
         "ppt-intent-classifier",
         "ppt-narrative-architect",
         "ppt-page-planner",
@@ -111,14 +105,14 @@ describe("agents/registry", () => {
         assert.ok(registryNames.includes(name), `expected dynamic project agent: ${name}`);
       }
 
-      const rafGoalSetter = getRegisteredAgent("raf-goal-setter", {
+      const gsiGoalSetter = getRegisteredAgent("gsi-goal-setter", {
         projectRoot: process.cwd(),
         codexHomeOverride: codexHome,
         includeBuiltIn: false,
       });
-      assert.equal(rafGoalSetter?.category, "coordination");
-      assert.equal(rafGoalSetter?.modelClass, "frontier");
-      assert.equal(rafGoalSetter?.routingRole, "leader");
+      assert.equal(gsiGoalSetter?.category, "coordination");
+      assert.equal(gsiGoalSetter?.modelClass, "frontier");
+      assert.equal(gsiGoalSetter?.routingRole, "leader");
 
       const pptAdapter = getRegisteredAgent("ppt-master-adapter", {
         projectRoot: process.cwd(),

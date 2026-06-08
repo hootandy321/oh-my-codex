@@ -37,7 +37,7 @@ describe('omx agents', () => {
     const wd = await mkdtemp(join(tmpdir(), 'omx-agents-cli-'));
     const home = join(wd, 'home');
     try {
-      const projectAgentsDir = join(wd, '.codex', 'agents');
+      const projectAgentsDir = join(wd, '.omx', 'agents');
       const userAgentsDir = join(home, '.codex', 'agents');
       await mkdir(projectAgentsDir, { recursive: true });
       await mkdir(userAgentsDir, { recursive: true });
@@ -79,7 +79,7 @@ describe('omx agents', () => {
       if (shouldSkipForSpawnPermissions(result.error)) return;
 
       assert.equal(result.status, 0, result.stderr || result.stdout);
-      const agentPath = join(wd, '.codex', 'agents', 'my-helper.toml');
+      const agentPath = join(wd, '.omx', 'agents', 'my-helper.toml');
       assert.equal(existsSync(agentPath), true);
 
       const content = await readFile(agentPath, 'utf-8');
@@ -93,11 +93,12 @@ describe('omx agents', () => {
     }
   });
 
-  it('refreshes project Markdown prompt agents into native TOML files', async () => {
+  it('checks project native TOML agents during refresh without reading prompts', async () => {
     const wd = await mkdtemp(join(tmpdir(), 'omx-agents-cli-refresh-'));
     const home = join(wd, 'home');
     try {
       await mkdir(join(wd, '.codex', 'prompts'), { recursive: true });
+      await mkdir(join(wd, '.omx', 'agents'), { recursive: true });
       await mkdir(home, { recursive: true });
       await writeFile(join(wd, '.codex', 'prompts', 'repo-specialist.md'), [
         '---',
@@ -109,6 +110,14 @@ describe('omx agents', () => {
         '',
         'Use repo-specific evidence first.',
       ].join('\n'));
+      await writeFile(join(wd, '.omx', 'agents', 'repo-specialist.toml'), [
+        'name = "repo-specialist"',
+        'description = "Repo specialist"',
+        'model_class = "fast"',
+        'model_reasoning_effort = "low"',
+        'tools = "read-only"',
+        'developer_instructions = """Use repo-specific evidence first."""',
+      ].join('\n'));
 
       const result = runOmx(wd, ['agents', 'refresh', '--scope', 'project'], {
         HOME: home,
@@ -117,14 +126,14 @@ describe('omx agents', () => {
       if (shouldSkipForSpawnPermissions(result.error)) return;
 
       assert.equal(result.status, 0, result.stderr || result.stdout);
-      assert.match(result.stdout, /created: repo-specialist/);
-      const agentPath = join(wd, '.codex', 'agents', 'repo-specialist.toml');
+      assert.match(result.stdout, /found: repo-specialist/);
+      const agentPath = join(wd, '.omx', 'agents', 'repo-specialist.toml');
       assert.equal(existsSync(agentPath), true);
       const content = await readFile(agentPath, 'utf-8');
       assert.match(content, /^name = "repo-specialist"$/m);
       assert.match(content, /^description = "Repo specialist"$/m);
       assert.match(content, /^model_reasoning_effort = "low"$/m);
-      assert.match(content, /model_class: fast/);
+      assert.match(content, /^model_class = "fast"$/m);
       assert.match(content, /Use repo-specific evidence first/);
     } finally {
       await rm(wd, { recursive: true, force: true });
@@ -135,7 +144,7 @@ describe('omx agents', () => {
     const wd = await mkdtemp(join(tmpdir(), 'omx-agents-cli-'));
     const home = join(wd, 'home');
     try {
-      const projectAgentsDir = join(wd, '.codex', 'agents');
+      const projectAgentsDir = join(wd, '.omx', 'agents');
       await mkdir(projectAgentsDir, { recursive: true });
       await mkdir(home, { recursive: true });
       const agentPath = join(projectAgentsDir, 'editor-test.toml');
@@ -178,7 +187,7 @@ describe('omx agents', () => {
     const wd = await mkdtemp(join(tmpdir(), 'omx-agents-cli-'));
     const home = join(wd, 'home');
     try {
-      const projectAgentsDir = join(wd, '.codex', 'agents');
+      const projectAgentsDir = join(wd, '.omx', 'agents');
       await mkdir(projectAgentsDir, { recursive: true });
       await mkdir(home, { recursive: true });
       const agentPath = join(projectAgentsDir, 'non-interactive.toml');
